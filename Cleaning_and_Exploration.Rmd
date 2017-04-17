@@ -1,0 +1,103 @@
+---
+title: "Cleaning and Exploration"
+author: "Andrew Deighan"
+date: "April 17, 2017"
+output: html_document
+---
+
+```{r, echo=F}
+
+#library(Hmisc)
+#BRFSS2015full <- sasxport.get("LLCP2015.XPT")
+#BRFSS2014full <- sasxport.get("LLCP2014.XPT")
+#BRFSS2013full <- sasxport.get("LLCP2013.XPT")
+#BRFSS2012full <- sasxport.get("LLCP2012.XPT")
+#BRFSS2011full <- sasxport.get("LLCP2011.XPT")
+
+#t15.data <- BRFSS2015full[,c("hlthpln1", "persdoc2", "x.llcpwt", "x.state")]
+#t14.data <- BRFSS2014full[,c("hlthpln1", "persdoc2", "x.llcpwt", "x.state")]
+#t13.data <- BRFSS2013full[,c("hlthpln1", "persdoc2", "x.llcpwt", "x.state")]
+#t12.data <- BRFSS2012full[,c("hlthpln1", "persdoc2", "x.llcpwt", "x.state")]
+#t11.data <- BRFSS2011full[,c("hlthpln1", "persdoc2", "x.llcpwt", "x.state")]
+
+#rm(BRFSS2015full, BRFSS2014full, BRFSS2013full, BRFSS2012full, BRFSS2011full)
+
+#n <- c(nrow(t11.data),
+#       nrow(t12.data),
+#       nrow(t13.data),
+#       nrow(t14.data),
+#       nrow(t15.data))
+
+```
+
+  First we will remove all missing values and count how many there were to see if removing them is likely to impact our data significantly.
+  
+```{r, echo=F, results="asis"}
+
+library(pander)
+
+## count observations before cleaning
+#n <- c(nrow(t11.data),
+#       nrow(t12.data),
+#       nrow(t13.data),
+#       nrow(t14.data),
+#       nrow(t15.data))
+
+
+## Remove missing values, refusals to respond, and thuse who were unsure
+#cleaner <- function(x){
+#  
+#      df <- x
+#      
+#      for(i in 1:4){
+#            df <- df[!is.na(df[,i]),] 
+#      }
+#      
+#      for(i in 1:2){
+#           df <- df[df[,i] != 7 & df[,i] != 9,] 
+#      }
+#
+#      
+#      df
+#}
+
+#t11.data <- cleaner(t11.data)
+#t12.data <- cleaner(t12.data)
+#t13.data <- cleaner(t13.data)
+#t14.data <- cleaner(t14.data)
+#t15.data <- cleaner(t15.data)
+
+## Count observations after cleaning
+#nc <- c(nrow(t11.data),
+#        nrow(t12.data),
+#        nrow(t13.data),
+#        nrow(t14.data),
+#        nrow(t15.data))
+#
+#
+#
+#removed.vals <- matrix(c(n, nc, (n-nc), ((n-nc)/n)*100), nrow = 5, ncol = 4,
+#                       dimnames = list(c("2011", "2012", "2013", "2014", "2015"),
+#                                       c("Total Before Cleaning", "Total After Cleaning", "Number Removed", "Percentage Removed"))
+#                       )
+#write.csv(removed.vals, "removedvaluestable.csv")
+
+removed.vals <- read.csv("removedvaluestable.csv")
+
+pandoc.table(removed.vals, split.table = Inf)
+
+#write.csv(t11.data, 'Cleaned 2011 BRFSS Data.csv')
+#write.csv(t12.data, 'Cleaned 2012 BRFSS Data.csv')
+#write.csv(t13.data, 'Cleaned 2013 BRFSS Data.csv')
+#write.csv(t14.data, 'Cleaned 2014 BRFSS Data.csv')
+#write.csv(t15.data, 'Cleaned 2015 BRFSS Data.csv')
+
+t11.data <- data.frame(read.csv("Cleaned 2011 BRFSS Data.csv"))
+t12.data <- data.frame(read.csv("Cleaned 2012 BRFSS Data.csv"))
+t13.data <- data.frame(read.csv("Cleaned 2013 BRFSS Data.csv"))
+t14.data <- data.frame(read.csv("Cleaned 2014 BRFSS Data.csv"))
+t15.data <- data.frame(read.csv("Cleaned 2015 BRFSS Data.csv"))
+             
+```
+
+Less than .8% of observations had to be removed for any given year. This should not impact our data significantly.
