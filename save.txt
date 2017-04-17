@@ -1,0 +1,14 @@
+library(Hmisc)
+BRFSS2015full <- sasxport.get("LLCP2015.XPT")
+BRFSS2014full <- sasxport.get("LLCP2014.XPT")
+BRFSS2013full <- sasxport.get("LLCP2013.XPT")
+BRFSS2012full <- sasxport.get("LLCP2012.XPT")
+BRFSS2011full <- sasxport.get("LLCP2011.XPT")
+
+t15.data <- BRFSS2015full[,c("hlthpln1", "persdoc2", "x.llcpwt", "x.state")]
+t14.data <- BRFSS2014full[,c("hlthpln1", "persdoc2", "x.llcpwt", "x.state")]
+t13.data <- BRFSS2013full[,c("hlthpln1", "persdoc2", "x.llcpwt", "x.state")]
+t12.data <- BRFSS2012full[,c("hlthpln1", "persdoc2", "x.llcpwt", "x.state")]
+t11.data <- BRFSS2011full[,c("hlthpln1", "persdoc2", "x.llcpwt", "x.state")]
+
+rm(BRFSS2015full, BRFSS2014full, BRFSS2013full, BRFSS2012full, BRFSS2011full)
