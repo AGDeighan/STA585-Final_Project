@@ -1,9 +1,13 @@
 ---
-title: "Cleaning and Exploration"
+title: "STA 585 Report Rough Draft"
 author: "Andrew Deighan"
 date: "April 17, 2017"
 output: html_document
 ---
+
+## Methods and Results
+
+### Yearly Insured Rates
 
 ```{r, include=F, eval=FALSE}
 
@@ -299,20 +303,12 @@ dev.off()
 
 ***
 
+<br>
+<br>
 
+### Relationship between Insured Rate and Primary Care Access: Poisson Regression
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+#### Cleaning Data
 
 ```{r, include=F, eval=F}
 
@@ -331,17 +327,6 @@ t11.data <- BRFSS2011full[,c("hlthpln1", "persdoc2", "x.llcpwt", "x.state")]
 
 rm(BRFSS2015full, BRFSS2014full, BRFSS2013full, BRFSS2012full, BRFSS2011full)
 
-n <- c(nrow(t11.data),
-       nrow(t12.data),
-       nrow(t13.data),
-       nrow(t14.data),
-       nrow(t15.data))
-
-```
-
-  First we will remove all missing values and count how many there were to see if removing them is likely to impact our data significantly.
-  
-```{r, include=F, eval=F}
 
 ## count observations before cleaning
 n <- c(nrow(t11.data),
@@ -397,22 +382,80 @@ write.csv(t15.data, 'Cleaned 2015 BRFSS Data.csv')
 
 ```
 
+  Firstly we need to clean our data sets by removing all missing values. We will check how many observations we end up eliminating to be sure that this removal will not impact our analysis significantly. Table 4 reports the number of observations before and after cleaning for each year as well as the percentage removed. Since only a small fraction (at most 0.79%) were removed for any given year we accept that the effect of these removals will be negligible.
+  
+***
+
 ```{r, include=F}
 
 removed.vals <- read.csv("removedvaluestable.csv")
 
-t11.data <- data.frame(read.csv("Cleaned 2011 BRFSS Data.csv"))
-t12.data <- data.frame(read.csv("Cleaned 2012 BRFSS Data.csv"))
-t13.data <- data.frame(read.csv("Cleaned 2013 BRFSS Data.csv"))
-t14.data <- data.frame(read.csv("Cleaned 2014 BRFSS Data.csv"))
-t15.data <- data.frame(read.csv("Cleaned 2015 BRFSS Data.csv"))
+t11.data <- data.frame(read.csv("Cleaned 2011 BRFSS Data.csv"))[,2:5]
+t12.data <- data.frame(read.csv("Cleaned 2012 BRFSS Data.csv"))[,2:5]
+t13.data <- data.frame(read.csv("Cleaned 2013 BRFSS Data.csv"))[,2:5]
+t14.data <- data.frame(read.csv("Cleaned 2014 BRFSS Data.csv"))[,2:5]
+t15.data <- data.frame(read.csv("Cleaned 2015 BRFSS Data.csv"))[,2:5]
              
 ```
 
 ```{r, echo=F, results="asis"}
 
-pandoc.table(removed.vals, split.table = Inf)
+colnames(removed.vals) <- c("Year", "Total Before Cleaning", "Total After Cleaning", "Number Removed", "Percentage Removed")
+
+pandoc.table(removed.vals,
+             caption = "**Table 4:** Number of missing values removed from data sets.",
+             split.table = Inf)
 
 ```
 
-Less than .8% of observations had to be removed for any given year. This should not impact our data significantly.
+<br>
+
+***
+
+<br>
+<br>
+#### Computed Weighted Summary Tables
+
+  We are interested in how the percentage of individuals with a personal doctor in a state is related to the percentage of people with insurance. Viewing percentage of people with a personal doctor as a rate (a per capita rate) we can use Poisson regression to regress this rate on the pecentage of individuals with insurance. We will use each individual state/territory included in the BRFSS as an observation. In order to do this we need to get the counts of individuals with a personal doctor and the counts of individuals with insurance for each state/territory. When doing this though we need to make use of the recomended weights in the BRFSS.
+  
+  For each observation (state/territory) we will have three values:
+
++ Weighted counts (rounded to nearest integer) of respondents with a personal doctor in that state
++ Weighted counts (rounded to nearest integer) of respondents with insurance in that state
++ Total number of respondents from that state (used as the offset in the regression model)
+
+```{r, include=F}
+
+counter <- function(x){
+  
+  out <- matrix(data = NA, 
+                nrow = length(unique(x$x.state)),
+                ncol = 4)
+  colnames(out) <- c("State", "Personal Doctor Count", "Insurance Count", "Total Respondents")
+  
+  c <- 0
+  for(i in unique(x$x.state)){
+    
+    c <- c + 1
+    wsum <- sum(x$x.llcpwt[x$x.state == i])
+    n <- length(x$x.llcpwt[x$x.state == i])
+    wf <- n/wsum
+    
+    countpd <- sum(x$x.llcpwt[x$x.state == i & x$persdoc2 == 1]) + sum(x$x.llcpwt[x$x.state == i & x$persdoc2 == 2])
+    countpd <- round(countpd*wf, digits = 0)
+    
+    countin <- sum(x$x.llcpwt[x$x.state == i & x$hlthpln1 == 1])
+    countin <- round(countin*wf, digits = 0)
+    
+    out[c,2] <- countpd
+    out[c,3] <- countin
+    out[c,4] <- n
+    
+  }
+  
+  out
+  
+}
+
+```
+
