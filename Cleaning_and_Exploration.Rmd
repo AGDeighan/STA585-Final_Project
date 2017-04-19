@@ -5,92 +5,403 @@ date: "April 17, 2017"
 output: html_document
 ---
 
-```{r, echo=F}
+```{r, include=F, eval=FALSE}
 
-#library(Hmisc)
-#BRFSS2015full <- sasxport.get("LLCP2015.XPT")
-#BRFSS2014full <- sasxport.get("LLCP2014.XPT")
-#BRFSS2013full <- sasxport.get("LLCP2013.XPT")
-#BRFSS2012full <- sasxport.get("LLCP2012.XPT")
-#BRFSS2011full <- sasxport.get("LLCP2011.XPT")
+library(RSocrata)
+url_base <- "https://chronicdata.cdc.gov/resource/fn2i-3j6c.json?"
 
-#t15.data <- BRFSS2015full[,c("hlthpln1", "persdoc2", "x.llcpwt", "x.state")]
-#t14.data <- BRFSS2014full[,c("hlthpln1", "persdoc2", "x.llcpwt", "x.state")]
-#t13.data <- BRFSS2013full[,c("hlthpln1", "persdoc2", "x.llcpwt", "x.state")]
-#t12.data <- BRFSS2012full[,c("hlthpln1", "persdoc2", "x.llcpwt", "x.state")]
-#t11.data <- BRFSS2011full[,c("hlthpln1", "persdoc2", "x.llcpwt", "x.state")]
+Insured.Rates.11 <- read.socrata(paste0(url_base,
+                                        "question=Do you have any kind of health care coverage?",
+                                        "&year=2011",
+                                        "&break_out=Overall",
+                                        "&response=Yes")
+                                 )
 
-#rm(BRFSS2015full, BRFSS2014full, BRFSS2013full, BRFSS2012full, BRFSS2011full)
+Insured.Rates.11 <- Insured.Rates.11[, c("locationabbr", "confidence_limit_low", "data_value", "confidence_limit_high", "sample_size")]
+colnames(Insured.Rates.11) <- c("State", "CI.LB", "Estimate", "CI.UB", "Sample.Size")
+write.csv(Insured.Rates.11, "2011 Insured Rates.csv")
 
-#n <- c(nrow(t11.data),
-#       nrow(t12.data),
-#       nrow(t13.data),
-#       nrow(t14.data),
-#       nrow(t15.data))
+Insured.Rates.12 <- read.socrata(paste0(url_base,
+                                        "question=Do you have any kind of health care coverage?",
+                                        "&year=2012",
+                                        "&break_out=Overall",
+                                        "&response=Yes")
+)
+
+Insured.Rates.12 <- Insured.Rates.12[, c("locationabbr", "confidence_limit_low", "data_value", "confidence_limit_high", "sample_size")]
+colnames(Insured.Rates.12) <- c("State", "CI.LB", "Estimate", "CI.UB", "Sample.Size")
+write.csv(Insured.Rates.12, "2012 Insured Rates.csv")
+
+Insured.Rates.13 <- read.socrata(paste0(url_base,
+                                        "question=Do you have any kind of health care coverage?",
+                                        "&year=2013",
+                                        "&break_out=Overall",
+                                        "&response=Yes")
+)
+
+Insured.Rates.13 <- Insured.Rates.13[, c("locationabbr", "confidence_limit_low", "data_value", "confidence_limit_high", "sample_size")]
+colnames(Insured.Rates.13) <- c("State", "CI.LB", "Estimate", "CI.UB", "Sample.Size")
+write.csv(Insured.Rates.13, "2013 Insured Rates.csv")
+
+Insured.Rates.14 <- read.socrata(paste0(url_base,
+                                        "question=Do you have any kind of health care coverage?",
+                                        "&year=2014",
+                                        "&break_out=Overall",
+                                        "&response=Yes")
+)
+
+Insured.Rates.14 <- Insured.Rates.14[, c("locationabbr", "confidence_limit_low", "data_value", "confidence_limit_high", "sample_size")]
+colnames(Insured.Rates.14) <- c("State", "CI.LB", "Estimate", "CI.UB", "Sample.Size")
+write.csv(Insured.Rates.14, "2014 Insured Rates.csv")
+
+Insured.Rates.15 <- read.socrata(paste0(url_base,
+                                        "question=Do you have any kind of health care coverage?",
+                                        "&year=2015",
+                                        "&break_out=Overall",
+                                        "&response=Yes")
+)
+
+Insured.Rates.15 <- Insured.Rates.15[, c("locationabbr", "confidence_limit_low", "data_value", "confidence_limit_high", "sample_size")]
+colnames(Insured.Rates.15) <- c("State", "CI.LB", "Estimate", "CI.UB", "Sample.Size")
+write.csv(Insured.Rates.15, "2015 Insured Rates.csv")
+
+```
+
+```{r, include=F}
+
+Insured.Rates.11 <- read.csv("2011 Insured Rates.csv")[,2:6]
+Insured.Rates.12 <- read.csv("2012 Insured Rates.csv")[,2:6]
+Insured.Rates.13 <- read.csv("2013 Insured Rates.csv")[,2:6]
+Insured.Rates.14 <- read.csv("2014 Insured Rates.csv")[,2:6]
+Insured.Rates.15 <- read.csv("2015 Insured Rates.csv")[,2:6]
+
+National.IR_calc <- function(x, alpha = 0.05){
+  
+  z <- qnorm(alpha/2, lower.tail = F)
+  n <- sum(x[1:53,5])
+  
+  IR <- sum(x[1:53,3]*x[1:53,5])/ (n)
+  SE <- sqrt(sum(x[1:53,5]*x[1:53,3]*(100 - x[1:53,3]))) / (n)
+  LB <- IR - z*SE
+  UB <- IR + z*SE
+  
+  out <- c(round(LB, digits = 4), round(IR, digits = 4), round(UB, digits = 4), round(SE, digits = 4))
+  
+  out
+}
+
+MedicaidExp.IR_calc <- function(x, alpha = 0.05){
+  df <- x[1:53,]
+  df <- df[order(df$State),]
+  df <- df[df$State != "AK" 
+          & df$State != "AR" 
+          & df$State != "AZ" 
+          & df$State != "IA" 
+          & df$State != "IN" 
+          & df$State != "MI"
+          & df$State != "NH" 
+          & df$State != "PA"
+          & df$State != "WI",]
+  
+  mdf <- df[df$State != "AL" 
+          & df$State != "FL" 
+          & df$State != "GA" 
+          & df$State != "ID" 
+          & df$State != "KS" 
+          & df$State != "LA"
+          & df$State != "ME" 
+          & df$State != "MS"
+          & df$State != "MT"
+          & df$State != "MO" 
+          & df$State != "NE" 
+          & df$State != "NC" 
+          & df$State != "OK" 
+          & df$State != "SC"
+          & df$State != "SD" 
+          & df$State != "TN"
+          & df$State != "TX"
+          & df$State != "UT" 
+          & df$State != "VA"
+          & df$State != "WY",]
+  
+  nmdf <- df[df$State == "AL" 
+          | df$State == "FL" 
+          | df$State == "GA" 
+          | df$State == "ID" 
+          | df$State == "KS" 
+          | df$State == "LA"
+          | df$State == "ME" 
+          | df$State == "MS"
+          | df$State == "MT"
+          | df$State == "MO" 
+          | df$State == "NE" 
+          | df$State == "NC" 
+          | df$State == "OK" 
+          | df$State == "SC"
+          | df$State == "SD" 
+          | df$State == "TN"
+          | df$State == "TX"
+          | df$State == "UT" 
+          | df$State == "VA"
+          | df$State == "WY",]
+  
+  z <- qnorm(alpha/2, lower.tail = F)
+  
+  n <- sum(mdf[,5])
+  IR <- sum(mdf[,3]*mdf[,5])/ (n)
+  SE <- sqrt(sum(mdf[,5]*mdf[,3]*(100 - mdf[,3]))) / (n)
+  LB <- IR - z*SE
+  UB <- IR + z*SE
+  
+  out <- c(round(LB, digits = 4), round(IR, digits = 4), round(UB, digits = 4), round(SE, digits = 4))
+  
+  n <- sum(nmdf[,5])
+  IR <- sum(nmdf[,3]*nmdf[,5])/ (n)
+  SE <- sqrt(sum(nmdf[,5]*nmdf[,3]*(100 - nmdf[,3]))) / (n)
+  LB <- IR - z*SE
+  UB <- IR + z*SE
+  
+  out <- c(out, round(LB, digits = 4), round(IR, digits = 4), round(UB, digits = 4), round(SE, digits = 4))
+  
+  out
+
+}
+
+Yearly.IR <- matrix(c(National.IR_calc(Insured.Rates.11), MedicaidExp.IR_calc(Insured.Rates.11),
+                      National.IR_calc(Insured.Rates.12), MedicaidExp.IR_calc(Insured.Rates.12),
+                      National.IR_calc(Insured.Rates.13), MedicaidExp.IR_calc(Insured.Rates.13),
+                      National.IR_calc(Insured.Rates.14), MedicaidExp.IR_calc(Insured.Rates.14),
+                      National.IR_calc(Insured.Rates.15), MedicaidExp.IR_calc(Insured.Rates.15)),
+                     nrow = 15, ncol = 4, byrow = T,
+                     dimnames = list(c("2011", "2001", "2011", 
+                                       "2012", "2012", "2012", 
+                                       "2013", "2013", "2013", 
+                                       "2014", "2014", "2014", 
+                                       "2015", "2015", "2015"), 
+                                     c("Lower Bound", "Estimate", "Upper Bound", "Standard Error"))
+                     )
+
+```
+
+  Tables 1, 2 and 3 report the estimated yearly insured rates of adults for the nation as a whole, states that adopted medicaid expansion on January 1st 2014, and those states that had not adopted the expansion as of the end of 2015. These insured rates were estimated from the 2011 to 2015 BRFSS which is restricted to adults. This restriction may account for the estimated insured rates reported here being slightly less than those reported by the US Census Bureau. The percentage of insured adults does indeed rise from 2011 to 2015, even in states that did not adopt the Medicaid expansion. Moreover, there appears to be a particularly sharp increase from 2013 to 2015, which corresponds temporally with the initiation of most of the ACA reforms. However, states that did not adopt the Medicaid expansion had lower insured rates than those that did. Figures 1 and 2 show this graphically.
+
+***
+
+```{r, echo=F, results="asis"}
+
+library(pander)
+
+x <- Yearly.IR[c(1,4,7,10,13),]
+
+pandoc.table(x, caption = "**Table 1:** Estimated yearly adult insured rates (in percentages) for the nation as a whole. The table gives 95% confidence intervals for the percentage of insured adults as estimated from the 2011 to 2015 BRFSS surveys.", split.table = Inf)
+
+```
+
+<br>
+
+```{r, echo=F, results="asis"}
+
+x <- Yearly.IR[c(2,5,8,11,14),]
+
+pandoc.table(x, caption = "**Table 2:** Estimated yearly adult insured rates (in percentages) for states that adopted the Medicaid expansion on January 1st 2014. The table gives 95% confidence intervals for the percentage of insured adults in states that adopted the Medicaid expansion, as estimated from the 2011 to 2015 BRFSS surveys.", split.table = Inf)
+
+```
+
+<br>
+
+```{r, echo=F, results="asis"}
+
+x <- Yearly.IR[c(3,6,9,12,15),]
+
+pandoc.table(x, caption = "**Table 3:** Estimated yearly adult insured rates (in percentages) for states that had not adopted the Medicaid expansion as of the end of 2015. The table gives 95% confidence intervals for the percentage of insured adults in states that did not adopt the Medicaid expansion, as estimated from the 2011 to 2015 BRFSS surveys.", split.table = Inf)
+
+rm(x)
+
+```
+
+<br>
+
+```{r, include=F}
+
+png("plots/Nation_IR.png",
+     height = 400, width = 480)
+ 
+barcenters <- barplot(Yearly.IR[c(1,4,7,10,13),2], 
+                      ylim = c( 80  , 92 ),
+                      main = "Estimated Insured Rates among Adults: National Level", 
+                      ylab = "Percentage",
+                      xpd = FALSE, cex.names = .9, cex.main = 1 )
+
+abline(h=80)
+
+segments(barcenters, Yearly.IR[c(1,4,7,10,13),1], barcenters,Yearly.IR[c(1,4,7,10,13),3], 
+         lwd = 1.5)
+
+arrows(barcenters, Yearly.IR[c(1,4,7,10,13),1], barcenters, Yearly.IR[c(1,4,7,10,13),3], 
+       lwd = 1.5, angle = 90, code = 3, length = 0.05)
+
+dev.off()
+
+
+```
+
+![**Figure 1:** The plot above shows the estimated percentage of insured adults from 2011 to 2105. The line segments at the top of each bar represent the estimated 95% confidence intervals for the percentage of insured adults. Note the jump in percentage from 2013 to 2014.](plots/Nation_IR.png)
+
+<br>
+
+```{r, include=F}
+
+# mai = c(.7,.5,.7,.4), cex = .9, oma = c(0,0,2,0), font.main = 1, cex.axis = .9
+
+png("plots/Medicaid_IR.png",
+     height = 400, width = 800)
+
+par(mfrow=c(1,2))
+barplot(Yearly.IR[c(2,5,8,11,14),2], 
+        ylim = c( 80,92 ),
+        main = NA,
+        sub = "Medicaid Expansion", 
+        ylab = "Percentage",
+        xpd = FALSE, 
+        cex.names = .9, cex.main = 1
+        )
+abline(h=80)
+
+segments(barcenters, Yearly.IR[c(2,5,8,11,14),1], barcenters, Yearly.IR[c(2,5,8,11,14),3], 
+         lwd = 1.5)
+
+arrows(barcenters, Yearly.IR[c(2,5,8,11,14),1], barcenters, Yearly.IR[c(2,5,8,11,14),3], 
+       lwd = 1.5, angle = 90, code = 3, length = 0.05)
+
+barplot(Yearly.IR[c(3,6,9,12,15),2], 
+        ylim = c(80, 92),
+        main = NA,
+        sub = "No Medicaid Expansion", 
+        ylab = NA,
+        xpd = FALSE, 
+        cex.names = .9, cex.main = 1
+        )
+abline(h=80)
+
+segments(barcenters, Yearly.IR[c(3,6,9,12,15),1], barcenters, Yearly.IR[c(3,6,9,12,15),3], 
+         lwd = 1.5)
+
+arrows(barcenters, Yearly.IR[c(3,6,9,12,15),1], barcenters, Yearly.IR[c(3,6,9,12,15),3], 
+       lwd = 1.5, angle = 90, code = 3, length = 0.05)
+
+mtext('Estimated Insured Rates among Adults: States with Medicaid Expansion and States without', outer = TRUE, font = 2, padj = 2)
+
+dev.off()
+
+```
+
+![**Figure 2:** The plots above show the estimated percentage of adults with insurance in states that adopted the Medicaid expansion at the beginning of 2014 and those that had not adopted the expansion as of the end of 2015. The line segments at the top of each bar indicate the 95% confidence for the percentage of insured adults for that year. It is clear that in both states with and without the Medicaid expansion, insured rates have increased from 2011 to 2015 and there was a sharp boost in insured rates from 2013 to 2014 that corresponds with the initiation of most of the ACA reforms. Also, it is clear that while insured rates increaed for both Medicaid expansion states and non-Medicaid expansion states, overall the percentage of insured adults in states without the expansion is much lower..](plots/Medicaid_IR.png)
+
+<br>
+
+***
+
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+```{r, include=F, eval=F}
+
+library(Hmisc)
+BRFSS2015full <- sasxport.get("LLCP2015.XPT")
+BRFSS2014full <- sasxport.get("LLCP2014.XPT")
+BRFSS2013full <- sasxport.get("LLCP2013.XPT")
+BRFSS2012full <- sasxport.get("LLCP2012.XPT")
+BRFSS2011full <- sasxport.get("LLCP2011.XPT")
+
+t15.data <- BRFSS2015full[,c("hlthpln1", "persdoc2", "x.llcpwt", "x.state")]
+t14.data <- BRFSS2014full[,c("hlthpln1", "persdoc2", "x.llcpwt", "x.state")]
+t13.data <- BRFSS2013full[,c("hlthpln1", "persdoc2", "x.llcpwt", "x.state")]
+t12.data <- BRFSS2012full[,c("hlthpln1", "persdoc2", "x.llcpwt", "x.state")]
+t11.data <- BRFSS2011full[,c("hlthpln1", "persdoc2", "x.llcpwt", "x.state")]
+
+rm(BRFSS2015full, BRFSS2014full, BRFSS2013full, BRFSS2012full, BRFSS2011full)
+
+n <- c(nrow(t11.data),
+       nrow(t12.data),
+       nrow(t13.data),
+       nrow(t14.data),
+       nrow(t15.data))
 
 ```
 
   First we will remove all missing values and count how many there were to see if removing them is likely to impact our data significantly.
   
-```{r, echo=F, results="asis"}
-
-library(pander)
+```{r, include=F, eval=F}
 
 ## count observations before cleaning
-#n <- c(nrow(t11.data),
-#       nrow(t12.data),
-#       nrow(t13.data),
-#       nrow(t14.data),
-#       nrow(t15.data))
+n <- c(nrow(t11.data),
+       nrow(t12.data),
+       nrow(t13.data),
+       nrow(t14.data),
+       nrow(t15.data))
 
 
 ## Remove missing values, refusals to respond, and thuse who were unsure
-#cleaner <- function(x){
-#  
-#      df <- x
-#      
-#      for(i in 1:4){
-#            df <- df[!is.na(df[,i]),] 
-#      }
-#      
-#      for(i in 1:2){
-#           df <- df[df[,i] != 7 & df[,i] != 9,] 
-#      }
-#
-#      
-#      df
-#}
+cleaner <- function(x){
+  
+      df <- x
+      
+      for(i in 1:4){
+            df <- df[!is.na(df[,i]),] 
+      }
+      
+      for(i in 1:2){
+           df <- df[df[,i] != 7 & df[,i] != 9,] 
+      }
 
-#t11.data <- cleaner(t11.data)
-#t12.data <- cleaner(t12.data)
-#t13.data <- cleaner(t13.data)
-#t14.data <- cleaner(t14.data)
-#t15.data <- cleaner(t15.data)
+      
+      df
+}
+
+t11.data <- cleaner(t11.data)
+t12.data <- cleaner(t12.data)
+t13.data <- cleaner(t13.data)
+t14.data <- cleaner(t14.data)
+t15.data <- cleaner(t15.data)
 
 ## Count observations after cleaning
-#nc <- c(nrow(t11.data),
-#        nrow(t12.data),
-#        nrow(t13.data),
-#        nrow(t14.data),
-#        nrow(t15.data))
-#
-#
-#
-#removed.vals <- matrix(c(n, nc, (n-nc), ((n-nc)/n)*100), nrow = 5, ncol = 4,
-#                       dimnames = list(c("2011", "2012", "2013", "2014", "2015"),
-#                                       c("Total Before Cleaning", "Total After Cleaning", "Number Removed", "Percentage Removed"))
-#                       )
-#write.csv(removed.vals, "removedvaluestable.csv")
+nc <- c(nrow(t11.data),
+        nrow(t12.data),
+        nrow(t13.data),
+        nrow(t14.data),
+        nrow(t15.data))
+
+
+
+removed.vals <- matrix(c(n, nc, (n-nc), ((n-nc)/n)*100), nrow = 5, ncol = 4,
+                       dimnames = list(c("2011", "2012", "2013", "2014", "2015"),
+                                       c("Total Before Cleaning", "Total After Cleaning", "Number Removed", "Percentage Removed"))
+                       )
+write.csv(removed.vals, "removedvaluestable.csv")
+
+write.csv(t11.data, 'Cleaned 2011 BRFSS Data.csv')
+write.csv(t12.data, 'Cleaned 2012 BRFSS Data.csv')
+write.csv(t13.data, 'Cleaned 2013 BRFSS Data.csv')
+write.csv(t14.data, 'Cleaned 2014 BRFSS Data.csv')
+write.csv(t15.data, 'Cleaned 2015 BRFSS Data.csv')
+
+```
+
+```{r, include=F}
 
 removed.vals <- read.csv("removedvaluestable.csv")
-
-pandoc.table(removed.vals, split.table = Inf)
-
-#write.csv(t11.data, 'Cleaned 2011 BRFSS Data.csv')
-#write.csv(t12.data, 'Cleaned 2012 BRFSS Data.csv')
-#write.csv(t13.data, 'Cleaned 2013 BRFSS Data.csv')
-#write.csv(t14.data, 'Cleaned 2014 BRFSS Data.csv')
-#write.csv(t15.data, 'Cleaned 2015 BRFSS Data.csv')
 
 t11.data <- data.frame(read.csv("Cleaned 2011 BRFSS Data.csv"))
 t12.data <- data.frame(read.csv("Cleaned 2012 BRFSS Data.csv"))
@@ -98,6 +409,12 @@ t13.data <- data.frame(read.csv("Cleaned 2013 BRFSS Data.csv"))
 t14.data <- data.frame(read.csv("Cleaned 2014 BRFSS Data.csv"))
 t15.data <- data.frame(read.csv("Cleaned 2015 BRFSS Data.csv"))
              
+```
+
+```{r, echo=F, results="asis"}
+
+pandoc.table(removed.vals, split.table = Inf)
+
 ```
 
 Less than .8% of observations had to be removed for any given year. This should not impact our data significantly.
