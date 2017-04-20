@@ -378,7 +378,7 @@ $(document).ready(function () {
 </table>
 <p><br></p>
 <hr />
-<p><br> <br> #### Computed Weighted Summary Tables</p>
+<p><br> <br> #### Computed Weighted Counts</p>
 <p>We are interested in how the percentage of individuals with a personal doctor in a state is related to the percentage of people with insurance. Viewing percentage of people with a personal doctor as a rate (a per capita rate) we can use Poisson regression to regress this rate on the pecentage of individuals with insurance. We will use each individual state/territory included in the BRFSS as an observation. In order to do this we need to get the counts of individuals with a personal doctor and the counts of individuals with insurance for each state/territory. When doing this though we need to make use of the recomended weights in the BRFSS.</p>
 <p>For each observation (state/territory) we will have three values:</p>
 <ul>
@@ -387,6 +387,7 @@ $(document).ready(function () {
 <li>Total number of respondents from that state (used as the offset in the regression model)</li>
 </ul>
 <p>For instance, the observation for the state of Maine for 2011 would look as follows</p>
+<hr />
 <table style="width:97%;">
 <caption>2011 observation for state of Maine</caption>
 <colgroup>
@@ -412,7 +413,10 @@ $(document).ready(function () {
 </tr>
 </tbody>
 </table>
-<p>We will standardize the values to counts per 1000 respondents so the Maine 2011 observation will become:</p>
+<hr />
+<p><br></p>
+<p>We will standardize the values to counts per 100 respondents so the Maine 2011 observation will become:</p>
+<hr />
 <table style="width:97%;">
 <caption>Standardized 2011 observation for state of Maine</caption>
 <colgroup>
@@ -432,13 +436,27 @@ $(document).ready(function () {
 <tbody>
 <tr class="odd">
 <td align="center"><strong>ME</strong></td>
-<td align="center">758</td>
-<td align="center">750</td>
+<td align="center">76</td>
+<td align="center">75</td>
 <td align="center">2328</td>
 </tr>
 </tbody>
 </table>
+<hr />
+<p><br></p>
 <p>Since we are including all 50 states, the Distric of Colombia, Puerto Rico, and Guam we have 53 observations for each year.</p>
+<p>Figure 3 below plots the standardized personal doctor counts against the standardized insurance counts for each state for all years combined. It appears there is a postitive correlation between the personal doctor counts and insurance counts.</p>
+<hr />
+<div class="figure">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAeAAAAGQCAMAAABBKENmAAAAmVBMVEUAAAAAADoAAGYAOjoAOmYAOpAAZmYAZrY6AAA6ADo6AGY6OgA6OmY6OpA6ZmY6ZrY6kLY6kNtmAABmADpmAGZmOgBmOjpmOpBmZgBmZmZmtttmtv+QOgCQOjqQOmaQZgCQkDqQ29uQ2/+2ZgC2/7a2///bkDrbtmbb25Db27bb2//b/7bb/9vb////tmb/25D//7b//9v///9kHEr9AAAOfElEQVR4nO2dC3vbthlG6bSa5KxuS7lZt1F2GynmuiUmJf7/HzfceJFFxYAAUsCr9zyJLfPykcIRLiQAKmsINNm1T4BMCwWDQ8HgUDA4FAwOBYNDweBQMDgUDA4Fg0PB4FAwOBQMDgWDQ8HgUDA4FAwOBYNDweBQMDgUDA4Fg0PB4FAwOBQMzlUF79eZILfevsoK8bNeiZ0+vLxdWf/idGyLzfXhLmUnzvLc/o7n6sOVBS9FQtxtbbdvBefNYfPWsIrleGirw13GYbN4bcozb83xXL24vmDpS2RKkRb79Q+ru22pP/l6Ub36eSWzeKlyei9YvdSbqBydHzZZtngdxmnMmjZUJV7uPrzoiHpzcyhhY6n+N/pArVZxjOHxizZEf555d4JHh2oGH453Dz4xUQiWylTCiWypXt9t5SqRAerV4pvIrPX9Vm4wECx+mE3kL7FC/uqW6Ow9WCOWdmmsIsqF5lBiy1IuaGN3RYoSrI+vF3eC5XnqUxqEU5urDWREE8Ti4NNyfcHiXZbqM14Y310C9eplYmcymTrBYluzickrJiVb8xKzptvOpLGRtGwPJUPebyuT5wdFf2/MLO4EL/XqTH4C8/6j15g3Il7tTByLg09LBI2sQhWAooTTCVepJlSpitrlIIF3R4LFD7NJeSxY/G4Fl32qi0WnaWwO1cgyOi9FndkMFjVDwWbxULA5JbNBe6isbTW2Odji4NNy/RzcdKnRtT1Ech3nYPnX2yK68M7B5lDq13LXNebLtmo8KnPl4qFgc0qnObgZHtvq4JMShWD5vk1tqopBlbKmDm4zyH59lINVanV1sLE6WNKGVx+SNpSsPAdpXHXtNrGZLlzNIr20F9ydlAqhBetTOip0c/NGmrYVPXwf5w8+KVEIVsVV0fRFdN63olWKyHbnv9p0766DB61oWZdnMgF1K9qENWvMdmKDf3ZprDavuqtw5aNSDeW+uf6miM7bECq+OaV2A3Ooqmsay/X91cB3Dz4pvJMFDgWDQ8HgUDA4FAwOBYNDweBQMDgUDA4Fg0PB4FAwOBQMDgWDQ8HgUDA4FAwOBYNDweBQMDgUDA4Fg0PB4FAwOD6CMxIDEwr22JeEgoLB8RW8/+1FTfPUsyvd9iUzEECwdDz23BAKjoEAguuHV52TXfclM+AteH33+Vnm4IeTMpqCY8C/kXXYZMumGnnaAAXHAFvR4Ewg2PISm8yCt+B6lS3L0QfCUHAM+Ao+PG2bcslGVrSEuNFR5rxMihbmYHBC1ME56+B44WUSOBQMDgWDQ8HgUDA4FAwOBYNDweBQMDgUDA4Fg0PB4FAwOBQMDgWDQ8HgUDA4FAwOBYNDweBQMDgUDA4Fg0PB4FAwOBTsic002WtOpaVgP7Lm/Tdqs81kWAqulvu16zfKU7DDNpNhJ/jwtC2XIxMIfUJjACJ4/9vLLh+ZAuwTGgSMOvjw/OVxyxycIrZ1cLb4+rgNGprMAlvR4FjXwaOP4fAJTWbBRvBho597NfJEWY/QZBYccnDg0GQWLOvgUubgkQeteIQms2CZg11b0BahySywiAbHsojeOd6HtghNZsEyB69ZBycKb3SAwxw8A/F3NiiqPGjo2yGB7kIFb1VeSCqC648UfBEJCNZ1MIvoC0mkDg4cmsyCpWCZhR0b0RQcBZZDdjaFaEWzuzBB2OEPDnMwOKyDwWErGhwKBsdKsKqCd8uwocksWAneqXtYroYpOAZsBJvrI14mpYjVuOhnCk4WqyK6lFfAh83NdTaEmjl4zRmIdq3oSnYmuY67S15wqLm/V51DzMuk81DwdPtGAQVPt28c3E4dzJkNyULB4HDqCjgc+A4OG1ngsMMfHA7ZAcd70F29ys7UzxQcA745WK1pRldScAz41sFtth7J3hQcA76taObgyPGug/Ulcnp1cKh7v7HFOYlrsRrxSXehem9iizMa+P3VTveis5bLz2p6YhNz7e5CUcXW96MPQxOXScsyvSI6NjFXFnx4EnJHHwgu15TL0ZVRC46u7oygP3i0nJYLy5yXSdHifaMj1Rx8K3h3Nog6OE+wDr4Z2F0IDrsLwWF3ITjetyovDk1mgTkYHNbB4LAVDQ4Fg2MnuLzJ6aMQWAneJTYBPLZJY7FPPkvtGR02XW8pbnMRFJzONhdBwelscxFWgvW4unQmn8VWd8ZeB08TmswCBYNDweBQMDiQjSzSwxwMjqVgfsV7qliO6Hjc7oqKz4tOEOshO2WezJ0sMsByyM7TtlpScIpY1sHV4tuGX06ZIpCt6DknhIHci06qFR2qZ+ZmepNUKzp46Omg4DeB31+d1tNmKfhNYIvVaT1tlnXwIK7Vaj5tNlkgW9Gkx1Iwp66kiuWdLE4+SxWHVjRvVaYIczA4rIPBYSsaHNvepKXIw443Oyg4Bqz7g8vl6KMMLw9NZsG6Fb3jiI4ksczBz18et8zBKWJbB2eLr65dhnF3NsTeSRCKW+0ujL6bLxQUPP02VwWxP5iCB0D2B7MO7uGdLHDs70X/+ymZVjTpse5N2hW8Dk4R+ztZBe9kpYhDDmZ/cIqwPxgctqLBsRJcr1y/mNIiNJkFG8Hqy68c546+H5rMgo1g2XyufwkdmsyCtWDHi+D3Q5NZSE2w1a3f2O8Pz4mV4HgehGbVeRN9D8+cJHaZRMGuUDA4iQlmHexKaoKJI4k1sogrDmOy+KzKFHEYVcn+4BSx7g/m/OA0cegPdu1QouAYYCsaHI6qBMd3VKVseZ0pvyk4BnxHVYqFavlIfzEFx4DvqEphV+XsEfsUHAO+oyr367vPzzIHn5bfFBwD/q3owyZbNtWI/aN953wA7LwHixzb2YWF352sUD14s3YXQnQ7Wgr+/Y/CWnDW8iYOBV8D+1b0+FN29uuz42kpOAbsOxvKX59HL5P+PPeANNbBMeDQm1SONaPlmt14Azv9xEHAtxWty21xFXXqmIJjwG5c9Jezz+j4TsuLgmOAvUngcEwWOByTBQ7HZIHDMVngcEwWOA5FdODQZBYoGByHVnTg0FcG4T6zDbb9wWjXwRA9RTbc6p0sCj5eXTIHJ4plEf243RVYd7JYBw9Xi1Z0ye9NShLLO1lP22pJwSliWQdXi2+bzPFphhQcA7fair4Z2B8MDvuDwWF/MDjsDwaH/cHgsBUNzq3ei74ZrO9FBw9NZiG1ER3B+gjY2XC0OpYRHcF6+dhdeLQ6mhEdFOxKYq1oCnYltVY062BHbnZEx63AER3gcEQHOBzRAU5irWjiCvuDwbERfNjoITvsD06Q1O5FE0esBMtnkZ552tnlocksWAneFXK8DofspIjVsFn5pMqcjawksRR8eNpScJLYtaKL+qPIxLwXnSBWdXC9yorDhqMqU4R3ssChYHAoGBwKBoeCwaFgcCgYHAoGh4LBoWBwKBgcCgaHgsGhYHAoGBwKBoeCwaFgcCgYHAoGh4LBoWBwKBgcCgaHgsGhYHC8Bderc1/YQcEx4CtYPey/GX3ePwXHgK/gdk7pyNxSCo4B5mBwvOtg861ZrIMjha1ocCYQnLVcdEIkLN6NrPXZJ1hScAz4t6L/zM58nwMFx0CIy6Qzz0ij4BgIcx0smtKnjik4BkLd6LhkXzIDvEwCh4LBoWBwKBicKQWTGJhO8DSRgp1RbCd0nTdGwcnFoeDAgWKLQ8GBA8UWh4IDB4otDgUHDhRbHAoOHCi2ONcSTKKEgsGhYHAoGBwKBoeCwaFgcCgYHAoGh4LBCSG4XqlB0/t15vr1lqNx5CMFzsylcAvUz331i3PYZHfbAHG60/IN5JLSAQTvH7dNuXiVien6BbVjceSv+t4nQU0g8ar0+qS0cfT3o3vH6U/r4kDrwjmlAwiuH17l8Hg5Ql5+C7FvnEqe+s5HjAkkXvz0KUAc1+/NPhenOy2/QI9bp5QOl4PN0b3jtC/9Ax2ePnsV0d0b+8OviA6Wg00SO6V0iDpYVwmyFPMU01Yth83ZKasugcrcsw7WcepVoZLW+3y8GymqiL7bOqV0iCJaVJjVhxfvHGzifHdKsuMJ+QkO/Ma69+cRaZX9+jR7DjYfKO86uP1gyhwT4oRKNWrY47PSvrHfPQWbOP5FnMS1tRMuB8ty1asV3X7Qff32RYHnZVIbZ+dZRAfLwaoWXzZOKR2iDq4y1QjxrmJ0HJ3xvCSbE/K+Du7fmF/JauJ0p+UTyLUy550scCgYHAoGh4LBoWBwKBgcCgaHgsGhYHAoGBwKBoeCwaFgcCgYHAoGh4LBoWBwKBgcCgaHgsGhYHBSFFypUZdyuPIxb8dQir9PhrvqbS4ZBXvYjI/1PD2PqEhQsBzzXd9vTyWNCD7Z+WLBcjDy6LB1v1ktk5OiYJWiIkMtXsssWzb1z2vxsymzHz8VjV7y06cPL+rv+uHrWk1vqLJ+GxniL7WTzJW5DHh42pqd+oB6Mq7e0Rz1v/+TB+j2kNvJ8/i28ZpBMSkJCjZfxCYSWfyT0zI/vuif9aowS+63Tfe3KkTl712hlzVKsNqpWpp5nVKX3GkQUE8j0DuKXSo9lUCuU/P75B76wA+vOsxV0+QsKQqWQ/v1nDCRye5Mape5mlXcLmn03+2c3EpNUzLbKMFa0UplVf1afhYGAXVBUbXzm4xg+UuF1VvonzpMnKQpWE4NlTnnQ5+dtLxuSS9YrGv1nAhWRlW21zsNAxrBrTlT1XaCj7eTYa6UEu+QoGA5gUs3kEVqV3eD8nJddEsa/bd4pY3eb+UualnTC5ZTuHa5LLl1o20YUBbR1eIvtWNjGlnr3BTR7R5asA5z5WQ5Q4KC1fQ0mdoL0YD627rNpWV29/di3y5p9N/1w3+yo0aWWNYMcvBOzebaZT/+Q8+6HQY8bmSpr7rP1cGLpttDfhDWi1cdJkpSFEwcoGBwKBgcCgaHgsGhYHAoGBwKBoeCwaFgcCgYHAoGh4LBoWBwKBgcCgaHgsGhYHD+DwcgqEdi1X5RAAAAAElFTkSuQmCC" alt="Figure 3: The plot above shows the standardized personal doctor counts plotted against the standardized insurance counts. These are the counts for all years combined." />
+<p class="caption"><strong>Figure 3:</strong> The plot above shows the standardized personal doctor counts plotted against the standardized insurance counts. These are the counts for all years combined.</p>
+</div>
+<hr />
+<p><br> <br></p>
+</div>
+<div id="model-fitting-and-diagnostics" class="section level4">
+<h4>Model Fitting and Diagnostics</h4>
+<p>To fit our Poisson models, we will use the built in R function for fitting generlized linear models (“glm()”). We will fit one model for each year and then one model for all years combined. The model for all years combined will still be fit using only 53 observations because each state still only counts for 1 observation. We cannot count different years for the same state as different observations because we cannot reasonably assume that these observations would be independent. Instead, for each state we pool all the counts from different years.</p>
 </div>
 </div>
 </div>
