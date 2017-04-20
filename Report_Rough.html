@@ -124,10 +124,10 @@ $(document).ready(function () {
 </div>
 
 
-<div id="methods-and-results" class="section level2">
-<h2>Methods and Results</h2>
-<div id="yearly-insured-rates" class="section level3">
-<h3>Yearly Insured Rates</h3>
+<div id="methods-and-results" class="section level1">
+<h1>Methods and Results</h1>
+<div id="yearly-insured-rates" class="section level2">
+<h2>Yearly Insured Rates</h2>
 <p>Tables 1, 2 and 3 report the estimated yearly insured rates of adults for the nation as a whole, states that adopted medicaid expansion on January 1st 2014, and those states that had not adopted the expansion as of the end of 2015. These insured rates were estimated from the 2011 to 2015 BRFSS which is restricted to adults. This restriction may account for the estimated insured rates reported here being slightly less than those reported by the US Census Bureau. The percentage of insured adults does indeed rise from 2011 to 2015, even in states that did not adopt the Medicaid expansion. Moreover, there appears to be a particularly sharp increase from 2013 to 2015, which corresponds temporally with the initiation of most of the ACA reforms. However, states that did not adopt the Medicaid expansion had lower insured rates than those that did. Figures 1 and 2 show this graphically.</p>
 <hr />
 <table style="width:92%;">
@@ -314,10 +314,10 @@ $(document).ready(function () {
 <hr />
 <p><br> <br></p>
 </div>
-<div id="relationship-between-insured-rate-and-primary-care-access-poisson-regression" class="section level3">
-<h3>Relationship between Insured Rate and Primary Care Access: Poisson Regression</h3>
-<div id="cleaning-data" class="section level4">
-<h4>Cleaning Data</h4>
+<div id="relationship-between-insured-rate-and-primary-care-access-poisson-regression" class="section level2">
+<h2>Relationship between Insured Rate and Primary Care Access: Poisson Regression</h2>
+<div id="cleaning-data" class="section level3">
+<h3>Cleaning Data</h3>
 <p>Firstly we need to clean our data sets by removing all missing values. We will check how many observations we end up eliminating to be sure that this removal will not impact our analysis significantly. Table 4 reports the number of observations before and after cleaning for each year as well as the percentage removed. Since only a small fraction (at most 0.79%) were removed for any given year we accept that the effect of these removals will be negligible. We will also split each data set in half so we will have one half for fitting our model and one half for testing.</p>
 <hr />
 <table>
@@ -378,7 +378,7 @@ $(document).ready(function () {
 </table>
 <p><br></p>
 <hr />
-<p><br> <br> #### Computed Weighted Counts</p>
+<p><br> <br> ### Computed Weighted Counts</p>
 <p>We are interested in how the percentage of individuals with a personal doctor in a state is related to the percentage of people with insurance. Viewing percentage of people with a personal doctor as a rate (a per capita rate) we can use Poisson regression to regress this rate on the pecentage of individuals with insurance. We will use each individual state/territory included in the BRFSS as an observation. In order to do this we need to get the counts of individuals with a personal doctor and the counts of individuals with insurance for each state/territory. When doing this though we need to make use of the recomended weights in the BRFSS.</p>
 <p>For each observation (state/territory) we will have three values:</p>
 <ul>
@@ -436,8 +436,8 @@ $(document).ready(function () {
 <tbody>
 <tr class="odd">
 <td align="center"><strong>ME</strong></td>
-<td align="center">76</td>
-<td align="center">75</td>
+<td align="center">75.82</td>
+<td align="center">75.04</td>
 <td align="center">2328</td>
 </tr>
 </tbody>
@@ -454,9 +454,399 @@ $(document).ready(function () {
 <hr />
 <p><br> <br></p>
 </div>
-<div id="model-fitting-and-diagnostics" class="section level4">
-<h4>Model Fitting and Diagnostics</h4>
+<div id="model-fitting-and-diagnostics" class="section level3">
+<h3>Model Fitting and Diagnostics</h3>
 <p>To fit our Poisson models, we will use the built in R function for fitting generlized linear models (“glm()”). We will fit one model for each year and then one model for all years combined. The model for all years combined will still be fit using only 53 observations because each state still only counts for 1 observation. We cannot count different years for the same state as different observations because we cannot reasonably assume that these observations would be independent. Instead, for each state we pool all the counts from different years.</p>
+<p>After fitting our models we used the dispersion test (“dispersiontest()”) from the Applied Econometrics with R (“AER”) package to test if our data was over- or under-dispersed for a Poisson distribution. We found that our data for each model was significantly underdispersed. To correct for this, we refit the model using the “quasipoisson” family option which uses a Poisson distribution with an estimated dispersion parameter. This does not effect the estimates of the regression parameters, but it does effect the estimated standard errors of said parameters. In our case, since our data were under-dispersed, our estimated standard errors decreased. Table 5 below reports the estimated regression coefficient and estimated coefficient standard error for each model.</p>
+<hr />
+<table>
+<caption><strong>Table 5:</strong> Estimated regression coefficients, standard errors, and p-values for each fitted model.</caption>
+<colgroup>
+<col width="21%"></col>
+<col width="43%"></col>
+<col width="22%"></col>
+<col width="12%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">Fitted Regression Coefficient</th>
+<th align="center">Standard Error</th>
+<th align="center">P-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>2011</strong></td>
+<td align="center">0.01137</td>
+<td align="center">0.001301</td>
+<td align="center">1.025e-11</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>2012</strong></td>
+<td align="center">0.01069</td>
+<td align="center">0.00151</td>
+<td align="center">4.007e-09</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>2013</strong></td>
+<td align="center">0.0104</td>
+<td align="center">0.001616</td>
+<td align="center">4.261e-08</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>2014</strong></td>
+<td align="center">0.01181</td>
+<td align="center">0.001835</td>
+<td align="center">4.209e-08</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>2015</strong></td>
+<td align="center">0.01195</td>
+<td align="center">0.001921</td>
+<td align="center">9.28e-08</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>All Years</strong></td>
+<td align="center">0.01104</td>
+<td align="center">0.001874</td>
+<td align="center">3.002e-07</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<hr />
+<p><br></p>
+<div id="residual-analysis" class="section level4">
+<h4>Residual Analysis</h4>
+<p>Figure 4 below shows the residuals plotted agains the fitted values for each model. There does not appear to be any pattern to the residual scattering for any of the models.</p>
+<hr />
+<div class="figure">
+<img src="data:image/png;base64,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" alt="Figure 4: The plots above show the residuals plotted against the fitted values for each model." />
+<p class="caption"><strong>Figure 4:</strong> The plots above show the residuals plotted against the fitted values for each model.</p>
+</div>
+<hr />
+<p><br> <br></p>
+</div>
+<div id="global-fit-tests" class="section level4">
+<h4>Global Fit Tests</h4>
+<p><br> For global fit tests we are testing the null hypothesis that the model fits the data to the alternative hypothesis that the model does not fit the data and there is significant lack of fit. We performed two global fit tests for each model, the Pearson test and the likelihood ratio test. All six of our models passed both tests, indicating that there is not significant lack-of-fit.</p>
+<div id="pearson-goodness-of-fit-test" class="section level5">
+<h5>Pearson Goodness-of-Fit Test</h5>
+<p>The test-statistic for the Pearson test is:</p>
+<p><span class="math display">\[X^2 = \sum_{i = 1}^n {\frac{(y_i - \widehat{\mu_i})^2}{\widehat{\mu_i}}} \sim \chi_{n - p}^ 2 \\ n = \text{number of observations} \\ p = \text{number of model parameters} \]</span></p>
+<p><br></p>
+<p>For all of our model, the number of observations in the data set is 53 and the number of parameters is 2 (slope and intercept coefficients) so the degrees of freedom are 51. We used the following R function to calculate the test-statistic and corresponding p-value for each distribution.</p>
+<hr />
+<pre class="r"><code>#Function takes fitted values and observed values as arguments
+
+Pearson.Global.Fit &lt;- function(fitval, obsval, df = 51){
+  
+  TS &lt;- sum( (obsval - fitval)^2 / fitval ) 
+  p &lt;- pchisq(TS, df, lower.tail = FALSE)
+  
+  out &lt;- data.frame(c(TS, p))
+  out &lt;- t(out)
+  colnames(out) &lt;- c(&quot;Test-Statistic&quot;, &quot;P-value&quot;)
+  
+  out
+}</code></pre>
+<hr />
+<p><br></p>
+<p>Table 6 below reports the test-statistics and corresponding p-values for each model. The p-values are all approximately 1 indicating that we should accept the null hypothesis that the models fit the data.</p>
+<hr />
+<table style="width:58%;">
+<caption><strong>Table 6:</strong> Pearson goodness-of-fit test-statistics and p-values for each model</caption>
+<colgroup>
+<col width="22%"></col>
+<col width="23%"></col>
+<col width="12%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">Test-Statistic</th>
+<th align="center">P-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>2011</strong></td>
+<td align="center">9.64</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>2012</strong></td>
+<td align="center">12.25</td>
+<td align="center">1</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>2013</strong></td>
+<td align="center">13</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>2014</strong></td>
+<td align="center">13.17</td>
+<td align="center">1</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>2015</strong></td>
+<td align="center">12.33</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>All Years</strong></td>
+<td align="center">2.373</td>
+<td align="center">1</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<hr />
+<p><br> <br></p>
+</div>
+<div id="likelihood-ratio-goodness-of-fit-test" class="section level5">
+<h5>Likelihood Ratio Goodness-of-Fit Test</h5>
+<p>The test-statistic for the likelihood ratio test is:</p>
+<p><span class="math display">\[G^2 = 2 \sum_{i = 1}^n {y_i\ln{\frac{y_i}{\widehat{\mu_i}}}} \sim \chi_{n - p}^ 2 \\ n = \text{number of observations} \\ p = \text{number of model parameters}\]</span></p>
+<p><br></p>
+<p>Again all our models were fitted using data sets of 53 observations and all of our models have 2 parameters so our degrees of freedom are 51. We used the following R function to calculate the likelihood ratio test-statistic and corresponding p-value for each model.</p>
+<hr />
+<pre class="r"><code>#Function takes fitted values and observed values as arguments
+
+LR.Global.Fit &lt;- function(fitval, obsval, df = 51){
+  
+  TS &lt;- 2*sum( (obsval) * log( (obsval)/(fitval) ) ) 
+  p &lt;- pchisq(TS, df, lower.tail = FALSE)
+  
+  out &lt;- data.frame(c(TS, p))
+  out &lt;- t(out)
+  colnames(out) &lt;- c(&quot;Test-Statistic&quot;, &quot;P-value&quot;)
+  
+  out
+}</code></pre>
+<hr />
+<p><br></p>
+<p>Table 7 reports the calculated likelihood ratio test-statistics and corresponding p-values for each model. The p-values of virtually 1 indicate that, as with the Pearson test, the likelihood ratio test found no evidence of lack of fit for any of our models. Thus, we accept the null hypothesis that our models fit the data.</p>
+<hr />
+<table style="width:58%;">
+<caption><strong>Table 7:</strong> Likelihood ratio goodness-of-fit test-statistics and p-values for each model</caption>
+<colgroup>
+<col width="22%"></col>
+<col width="23%"></col>
+<col width="12%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">Test-Statistic</th>
+<th align="center">P-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>2011</strong></td>
+<td align="center">9.742</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>2012</strong></td>
+<td align="center">12.47</td>
+<td align="center">1</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>2013</strong></td>
+<td align="center">13.1</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>2014</strong></td>
+<td align="center">13.33</td>
+<td align="center">1</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>2015</strong></td>
+<td align="center">12.46</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>All Years</strong></td>
+<td align="center">2.376</td>
+<td align="center">1</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<hr />
+<p><br> <br></p>
+</div>
+</div>
+<div id="comparative-fit" class="section level4">
+<h4>Comparative Fit</h4>
+<p>From looking at the residual plots and the results of the global fit tests we have no reason to think that our models poorly fit the data. Now we want to see if they give us better fit than just the null model (a horizontal line at the global mean of the data set). To do this we will test the difference between deviance of the null model and the fitted model. The null hypothesis of this test is that the fitted model gives no better fit than the null model, the alternative is that it does give significantly better fit. The test statistic is the difference between the deviance of the null model and the deviance of the fitted model. The smaller the difference the less likely it is that the fitted model gives better fit than the null model. The test statistic has a chi-squared distribution with degrees of freedom equal to the difference between the number of parameters in the null model and the fitted model. So for us, the degrees of freedom will equal 1.</p>
+<p><span class="math display">\[ TS = \text{Deviance}_{null} - \text{Deviance}_{fitted} \sim{\chi_1^2} \]</span></p>
+<p>We can use the “summary()” function to find the deviance of each of our fitted models and their corresponding null models. Table 8 below reports the test-statistics and p-values for each of our models. For the models for each year, the p-values were all less than .01. This indicates that even at a 99% percent significance level we should reject the null hypothesis that the fitted model gives no better fit than the null model and concluded that the fitted model does indeed provide better fit. However, for the model for all years pooled together the p-value was 0.20 indicating that we should <em>fail</em> to reject the null hypothesis and concluded that when looking at all years combined the fitted model does give significantly better fit than the null model.</p>
+<hr />
+<table style="width:58%;">
+<caption><strong>Table 8:</strong> Comparative fit test-statistics and p-values for each model</caption>
+<colgroup>
+<col width="22%"></col>
+<col width="23%"></col>
+<col width="12%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">Test-Statistic</th>
+<th align="center">P-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>2011</strong></td>
+<td align="center">14.5</td>
+<td align="center">0.0001405</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>2012</strong></td>
+<td align="center">12.1</td>
+<td align="center">0.0005036</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>2013</strong></td>
+<td align="center">10.57</td>
+<td align="center">0.001151</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>2014</strong></td>
+<td align="center">10.84</td>
+<td align="center">0.0009945</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>2015</strong></td>
+<td align="center">9.468</td>
+<td align="center">0.00209</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>All Years</strong></td>
+<td align="center">1.623</td>
+<td align="center">0.2026</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<hr />
+<p><br> <br></p>
+</div>
+<div id="diagnostics-using-split-data-sets" class="section level4">
+<h4>Diagnostics Using Split Data Sets</h4>
+<p>Earlier on we mentioned that we split the BRFSS data sets for each year in half so we could use half of a data set to fit a model and the other half to test the model. Now we will use those data sets to test the models. We will begin by performing the last three tests we just performed.</p>
+<ul>
+<li>Pearson global fit test</li>
+<li>Likelihood ratio global fit test</li>
+<li>Deviance comparative fit test</li>
+</ul>
+<p>We will use the R function “predict()” to generate fitted values for observations in the diagnostic data sets and then use these fitted values to perform the above tests in the same manner as before. Tables 9 and 10 report the global fit statistics calculated using the test data sets. The p-values are still all approximately 1 indicating that there is still no evidence that our models fit the data poorly.</p>
+<hr />
+<table style="width:58%;">
+<caption><strong>Table 9:</strong> Pearson goodness-of-fit test-statistics and p-values for each model calculated using the testing half of the data sets.</caption>
+<colgroup>
+<col width="22%"></col>
+<col width="23%"></col>
+<col width="12%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">Test-Statistic</th>
+<th align="center">P-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>2011</strong></td>
+<td align="center">10.17</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>2012</strong></td>
+<td align="center">11.24</td>
+<td align="center">1</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>2013</strong></td>
+<td align="center">11.87</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>2014</strong></td>
+<td align="center">13.42</td>
+<td align="center">1</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>2015</strong></td>
+<td align="center">13.23</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>All Years</strong></td>
+<td align="center">10.5</td>
+<td align="center">1</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<table style="width:58%;">
+<caption><strong>Table 10:</strong> Likelihood ratio goodness-of-fit test-statistics and p-values for each model calculated using the testing half of the data sets.</caption>
+<colgroup>
+<col width="22%"></col>
+<col width="23%"></col>
+<col width="12%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">Test-Statistic</th>
+<th align="center">P-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>2011</strong></td>
+<td align="center">10.44</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>2012</strong></td>
+<td align="center">-17.73</td>
+<td align="center">1</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>2013</strong></td>
+<td align="center">19.17</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>2014</strong></td>
+<td align="center">-27.13</td>
+<td align="center">1</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>2015</strong></td>
+<td align="center">28.34</td>
+<td align="center">0.9958</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>All Years</strong></td>
+<td align="center">0.9131</td>
+<td align="center">1</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<hr />
+</div>
 </div>
 </div>
 </div>
