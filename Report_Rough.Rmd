@@ -459,7 +459,7 @@ pandoc.table(removed.vals,
 
 <br>
 <br>
-#### Computed Weighted Summary Tables
+#### Computed Weighted Counts
 
   We are interested in how the percentage of individuals with a personal doctor in a state is related to the percentage of people with insurance. Viewing percentage of people with a personal doctor as a rate (a per capita rate) we can use Poisson regression to regress this rate on the pecentage of individuals with insurance. We will use each individual state/territory included in the BRFSS as an observation. In order to do this we need to get the counts of individuals with a personal doctor and the counts of individuals with insurance for each state/territory. When doing this though we need to make use of the recomended weights in the BRFSS.
   
@@ -475,8 +475,8 @@ counter <- function(x){
   
   out <- matrix(data = NA, 
                 nrow = length(unique(x$x.state)),
-                ncol = 3)
-  colnames(out) <- c("Personal Doctor Count", "Insurance Count", "Total Respondents")
+                ncol = 4)
+  colnames(out) <- c("Personal Doctor Count", "Insurance Count", "Total Respondents", "Medicaid Expansion")
   
   c <- 0
   for(i in unique(x$x.state)){
@@ -498,13 +498,35 @@ counter <- function(x){
     
   }
   
+  
+  
   rownames(out) <- c(state.abb[1:8],
                      "DC",
                      state.abb[9:50],
                      "GU", "PR")
   
-  out
+  states <- as.character(row(out, as.factor = T)[,1])
+  states <-  setdiff(states, c("AK", "AR", "AZ", 
+                               "IA", "IN", "MI", 
+                               "NH", "PA", "WI")
+                     )
   
+  nomed <- c("AL", "FL", "GA", "ID", 
+             "KS", "LA", "ME", "MS",
+             "MT", "MO", "NE", "NC", 
+             "OK", "SC", "SD", "TN",
+             "TX", "UT", "VA", "WY")
+  
+  med <- setdiff(states, nomed)
+  
+  out[c("AK", "AR", "AZ", 
+        "IA", "IN", "MI", 
+        "NH", "PA", "WI"), 4] <- 100
+  out[nomed, 4] <- 0
+  out[med, 4] <- 1
+  
+  
+  out
 }
 
 t11.counts <- counter(t11.data)
@@ -513,6 +535,7 @@ t13.counts <- counter(t13.data)
 t14.counts <- counter(t14.data)
 t15.counts <- counter(t15.data)
 AY.counts <- t11.counts + t12.counts + t13.counts + t14.counts + t15.counts
+AY.counts[,4] <- AY.counts[,4]/5
 
 write.csv(t11.counts, "2011 counts.csv")
 write.csv(t12.counts, "2012 counts.csv")
@@ -527,86 +550,139 @@ write.csv(AY.counts, "All Year counts.csv")
 
 t11.counts <- read.csv("2011 counts.csv")
 rownames(t11.counts) <- t11.counts[,1]
-t11.counts <- t11.counts[,2:4]
+t11.counts <- t11.counts[,2:5]
 
 t12.counts <- read.csv("2012 counts.csv")
 rownames(t12.counts) <- t12.counts[,1]
-t12.counts <- t12.counts[,2:4]
+t12.counts <- t12.counts[,2:5]
 
 t13.counts <- read.csv("2013 counts.csv")
 rownames(t13.counts) <- t13.counts[,1]
-t13.counts <- t13.counts[,2:4]
+t13.counts <- t13.counts[,2:5]
 
 t14.counts <- read.csv("2014 counts.csv")
 rownames(t14.counts) <- t14.counts[,1]
-t14.counts <- t14.counts[,2:4]
+t14.counts <- t14.counts[,2:5]
 
 t15.counts <- read.csv("2015 counts.csv")
 rownames(t15.counts) <- t15.counts[,1]
-t15.counts <- t15.counts[,2:4]
+t15.counts <- t15.counts[,2:5]
 
 AY.counts <- read.csv("All Year counts.csv")
 rownames(AY.counts) <- AY.counts[,1]
-AY.counts <- AY.counts[,2:4]
+AY.counts <- AY.counts[,2:5]
 
 ```
 
 For instance, the observation for the state of Maine for 2011 would look as follows
 
+***
+
 ```{r, echo=F, results="asis"}
 
 x <- t11.counts["ME",]
-colnames(x) <- c("Personal Doctor Count", "Insurance Count", "Total Respondents")
+colnames(x) <- c("Personal Doctor Count", "Insurance Count", "Total Respondents", "Medicaid Expansion")
 
-pandoc.table(x,
+pandoc.table(x[1:3],
              caption = "2011 observation for state of Maine",
              split.table = Inf)
 
 ```
 
+***
+<br>
 
 ```{r, include=F}
 
 ## Standardizing counts by total number of respondents
 
 t11.std <- data.frame(t11.counts)
-t11.std[,1] <- round(1000*t11.std[,1]/t11.std[,3], digits = 0)
-t11.std[,2] <- round(1000*t11.std[,2]/t11.std[,3], digits = 0)
+t11.std[,1] <- round(100*t11.std[,1]/t11.std[,3], digits = 0)
+t11.std[,2] <- round(100*t11.std[,2]/t11.std[,3], digits = 0)
 
 t12.std <- data.frame(t12.counts)
-t12.std[,1] <- round(1000*t12.std[,1]/t12.std[,3], digits = 0)
-t12.std[,2] <- round(1000*t12.std[,2]/t12.std[,3], digits = 0) 
+t12.std[,1] <- round(100*t12.std[,1]/t12.std[,3], digits = 0)
+t12.std[,2] <- round(100*t12.std[,2]/t12.std[,3], digits = 0) 
 
 t13.std <- data.frame(t13.counts)
-t13.std[,1] <- round(1000*t13.std[,1]/t13.std[,3], digits = 0)
-t13.std[,2] <- round(1000*t13.std[,2]/t13.std[,3], digits = 0) 
+t13.std[,1] <- round(100*t13.std[,1]/t13.std[,3], digits = 0)
+t13.std[,2] <- round(100*t13.std[,2]/t13.std[,3], digits = 0) 
 
 t14.std <- data.frame(t14.counts)
-t14.std[,1] <- round(1000*t14.std[,1]/t14.std[,3], digits = 0)
-t14.std[,2] <- round(1000*t14.std[,2]/t14.std[,3], digits = 0) 
+t14.std[,1] <- round(100*t14.std[,1]/t14.std[,3], digits = 0)
+t14.std[,2] <- round(100*t14.std[,2]/t14.std[,3], digits = 0) 
 
 t15.std <- data.frame(t15.counts)
-t15.std[,1] <- round(1000*t15.std[,1]/t15.std[,3], digits = 0)
-t15.std[,2] <- round(1000*t15.std[,2]/t15.std[,3], digits = 0)
+t15.std[,1] <- round(100*t15.std[,1]/t15.std[,3], digits = 0)
+t15.std[,2] <- round(100*t15.std[,2]/t15.std[,3], digits = 0)
 
 AY.std <- data.frame(AY.counts)
-AY.std[,1] <- round(1000*AY.std[,1]/AY.std[,3], digits = 0)
-AY.std[,2] <- round(1000*AY.std[,2]/AY.std[,3], digits = 0) 
+AY.std[,1] <- round(100*AY.std[,1]/AY.std[,3], digits = 0)
+AY.std[,2] <- round(100*AY.std[,2]/AY.std[,3], digits = 0) 
 
 ```
 
-We will standardize the values to counts per 1000 respondents so the Maine 2011 observation will become:
+We will standardize the values to counts per 100 respondents so the Maine 2011 observation will become:
+
+***
 
 ```{r, echo=F, results="asis"}
 
-x[1] <- round(1000*x[1]/x[3], digits = 0)
-x[2] <- round(1000*x[2]/x[3], digits = 0)
+x[1] <- round(100*x[1]/x[3], digits = 0)
+x[2] <- round(100*x[2]/x[3], digits = 0)
 
-pandoc.table(x,
+pandoc.table(x[1:3],
              caption = "Standardized 2011 observation for state of Maine",
              split.table = Inf)
 
 ```
 
+***
+<br>
 
 Since we are including all 50 states, the Distric of Colombia, Puerto Rico, and Guam we have 53 observations for each year.
+
+  Figure 3 below plots the standardized personal doctor counts against the standardized insurance counts for each state for all years combined. It appears there is a postitive correlation between the personal doctor counts and insurance counts.
+  
+***
+  
+```{r, include=F}
+
+png("plots/AY_counts.png",
+     height = 400, width = 480)
+ 
+plot(AY.std$Insurance.Count, AY.std$Personal.Doctor.Count,
+     ylim = c(70, 85),
+     xlim = c(80, 90),
+     main = "Personal Doctor counts v.s. Insurance Counts",
+     ylab = "Standardized Personal Doctor Counts",
+     xlab = "Standardized Insurance Counts",
+     cex.lab = .9, cex.main = 1 )
+
+dev.off()
+
+```
+
+![**Figure 3:** The plot above shows the standardized personal doctor counts plotted against the standardized insurance counts. These are the counts for all years combined.](plots/AY_counts.png)
+
+***
+<br>
+<br>
+
+
+
+#### Model Fitting and Diagnostics
+
+  To fit our Poisson models, we will use the built in R function for fitting generlized linear models ("glm()"). We will fit one model for each year and then one model for all years combined. The model for all years combined will still be fit using only 53 observations because each state still only counts for 1 observation. We cannot count different years for the same state as different observations because we cannot reasonably assume that these observations would be independent. Instead, for each state we pool all the counts from different years.
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
