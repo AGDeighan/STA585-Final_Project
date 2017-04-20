@@ -316,7 +316,10 @@ $(document).ready(function () {
 </div>
 <div id="relationship-between-insured-rate-and-primary-care-access-poisson-regression" class="section level3">
 <h3>Relationship between Insured Rate and Primary Care Access: Poisson Regression</h3>
-<p>Firstly we need to clean our data sets by removing all missing values. We will check how many observations we end up eliminating to be sure that this removal will not impact our analysis significantly. Table 4 reports the number of observations before and after cleaning for each year as well as the percentage removed. Since only a small fraction (at most 0.79%) were removed for any given year we accept that the effect of these removals will be negligible.</p>
+<div id="cleaning-data" class="section level4">
+<h4>Cleaning Data</h4>
+<p>Firstly we need to clean our data sets by removing all missing values. We will check how many observations we end up eliminating to be sure that this removal will not impact our analysis significantly. Table 4 reports the number of observations before and after cleaning for each year as well as the percentage removed. Since only a small fraction (at most 0.79%) were removed for any given year we accept that the effect of these removals will be negligible. We will also split each data set in half so we will have one half for fitting our model and one half for testing.</p>
+<hr />
 <table>
 <caption><strong>Table 4:</strong> Number of missing values removed from data sets.</caption>
 <colgroup>
@@ -373,7 +376,70 @@ $(document).ready(function () {
 </tr>
 </tbody>
 </table>
-<p>Less than .8% of observations had to be removed for any given year. This should not impact our data significantly.</p>
+<p><br></p>
+<hr />
+<p><br> <br> #### Computed Weighted Summary Tables</p>
+<p>We are interested in how the percentage of individuals with a personal doctor in a state is related to the percentage of people with insurance. Viewing percentage of people with a personal doctor as a rate (a per capita rate) we can use Poisson regression to regress this rate on the pecentage of individuals with insurance. We will use each individual state/territory included in the BRFSS as an observation. In order to do this we need to get the counts of individuals with a personal doctor and the counts of individuals with insurance for each state/territory. When doing this though we need to make use of the recomended weights in the BRFSS.</p>
+<p>For each observation (state/territory) we will have three values:</p>
+<ul>
+<li>Weighted counts (rounded to nearest integer) of respondents with a personal doctor in that state</li>
+<li>Weighted counts (rounded to nearest integer) of respondents with insurance in that state</li>
+<li>Total number of respondents from that state (used as the offset in the regression model)</li>
+</ul>
+<p>For instance, the observation for the state of Maine for 2011 would look as follows</p>
+<table style="width:97%;">
+<caption>2011 observation for state of Maine</caption>
+<colgroup>
+<col width="12%"></col>
+<col width="33%"></col>
+<col width="25%"></col>
+<col width="26%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">Personal Doctor Count</th>
+<th align="center">Insurance Count</th>
+<th align="center">Total Respondents</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>ME</strong></td>
+<td align="center">1765</td>
+<td align="center">1747</td>
+<td align="center">2328</td>
+</tr>
+</tbody>
+</table>
+<p>We will standardize the values to counts per 1000 respondents so the Maine 2011 observation will become:</p>
+<table style="width:97%;">
+<caption>Standardized 2011 observation for state of Maine</caption>
+<colgroup>
+<col width="12%"></col>
+<col width="33%"></col>
+<col width="25%"></col>
+<col width="26%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">Personal Doctor Count</th>
+<th align="center">Insurance Count</th>
+<th align="center">Total Respondents</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>ME</strong></td>
+<td align="center">758</td>
+<td align="center">750</td>
+<td align="center">2328</td>
+</tr>
+</tbody>
+</table>
+<p>Since we are including all 50 states, the Distric of Colombia, Puerto Rico, and Guam we have 53 observations for each year.</p>
+</div>
 </div>
 </div>
 
