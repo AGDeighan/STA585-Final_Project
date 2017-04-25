@@ -1437,7 +1437,7 @@ dev.off()
 ***
 <br>
 
-  Figure 6 shows the 95% confidence intervals for the estimated intercept and slope for each model
+  Figure 6 shows the 95% confidence intervals for the estimated intercept and slope for each model. Even though the apparant shift seen in the log-linear models in figure 5 seems to indicate that the intercepts for the models differ, we can see from figure 6 that the confidence intervals for each intercept includes the point estimates for the intercepts of the other model. This negates the possibility that the intercepts differ significantly. Additionally, as expected from looking at figure 5, the slopes do not differ significantly either.
 
 ```{r, include = F}
 # Takes summary object and desired alpha level as arguments
@@ -1470,5 +1470,77 @@ Parameters <- matrix(c(Param.Conf(sumt11),
                      nrow = 6, ncol = 7, byrow = T)
 colnames(Parameters) <- c("LB Intercept", "Intercept Estimate", "UB Intercept", "       ", "LB Slope", "Slope Estimate", "UB Slope")
 rownames(Parameters) <- c("2011", "2012", "2013", "2014", "2015", "Five Year Average")
+
+```
+
+***
+
+```{r, include=F}
+
+png("plots/Param_Conf.png",
+    height = 400, width = 960)
+
+par(mfrow = c(1,2))
+
+plot(x = c(1:6), y = Parameters[,2], 
+     main = "Intercept", 
+     ylab = NA,
+     xlab = NA,
+     xlim = c(1,6), 
+     ylim = c(2.95, 3.75), 
+     pch=20, col = "red",
+     axes = FALSE, cex.main = 1, cex = 1, cex.lab = 1)
+box()
+
+axis(1, at = c(1:6), labels = c ("2011", "2012", "2013", "2014", "2015", "Average"), cex.axis = 1)
+axis(2, at = seq(from = 2.90, to = 3.80, by = 0.1), las = 2, cex.axis = 1)
+
+segments(c(1:6), Parameters[,1], c(1:6), Parameters[,3], 
+         lwd = 1.5)
+
+arrows(c(1:6), Parameters[,1], c(1:6), Parameters[,3], 
+       lwd = 1.5, angle = 90, code = 3, length = 0.05)
+
+##
+
+plot(x = c(1:6), y = Parameters[,6], 
+     main = "Slope", 
+     ylab = NA,
+     xlab = NA,
+     xlim = c(1,6), 
+     ylim = c(0.006, 0.016), 
+     pch=20, col = "red",
+     axes = FALSE, cex.main = 1, cex = 1, cex.lab = 1)
+box()
+
+axis(1, at = c(1:6), labels = c ("2011", "2012", "2013", "2014", "2015", "Average"), cex.axis = 1)
+axis(2, at = seq(from = 0.006, to = 0.016, by = 0.002), las = 2, cex.axis = 1)
+
+
+segments(c(1:6), Parameters[,5], c(1:6), Parameters[,7], lwd = 1.5)
+arrows(c(1:6), Parameters[,5], c(1:6),Parameters[,7], lwd = 1.5, angle = 90, code = 3, length = 0.03)
+
+mtext('95% Confidence Intervals for Model Parameters', 
+      outer = T, font = 2, cex = 1.2, adj = .5, padj = 1.5)
+
+dev.off()
+
+```
+
+![**Figure 6:** 95% confidence intervals for the model parameters. Since the confidence intervals for each intercept include the point estimates for every other intercept we can conclude that the intercepts do not differ significantly between models. The same is true for the slope parameters.](plots/Param_Conf.png)
+
+***
+<br>
+
+ Table 12 reports the estimated slope and its 95% confidenct interval for each model. Recall that the repsonse variable is the number of individuals with a personal doctor per 100 respondents and the explanatory variable is the number of individuals with insurance per 100 respondents. Assuming that the BRFSS is a representative sample, we can then view the response variable as the estimated percentage of individuals with a personal doctor in a state while the explanatory variable is the estimated percentage of individuals with insurance in a state. Thus the estimated slope coefficient of 0.01104 implies that for a 1 percentage increase in individuals with insurance we should expect a $e^(0.01104) = 1.011 $ fold increase in the percentage of individuals with a personal doctor. While this may not seem like a large difference it can be quite significant. For instance, for a state the size of Maine (population ~1,292,816) an increase in insured percentage from .93 to .94 would correspond with an estimated increase of over 13,000 individuals with a personal doctor.
+ 
+```{r, echo=F, results="asis"}
+
+x <- Parameters[,5:7]
+colnames(x) <- c("Lower Bound", "Point Estimate", "Upper Bound")
+
+pandoc.table(x,
+             caption = "**Table 12:** 95% confidence intervals for the slope parameter of each fitted model.",
+             split.table = Inf)
 
 ```
