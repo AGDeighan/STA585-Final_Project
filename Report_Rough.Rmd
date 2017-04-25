@@ -23,7 +23,7 @@ Insured.Rates.11 <- read.socrata(paste0(url_base,
 
 Insured.Rates.11 <- Insured.Rates.11[, c("locationabbr", "confidence_limit_low", "data_value", "confidence_limit_high", "sample_size")]
 colnames(Insured.Rates.11) <- c("State", "CI.LB", "Estimate", "CI.UB", "Sample.Size")
-write.csv(Insured.Rates.11, "2011 Insured Rates.csv")
+write.csv(Insured.Rates.11, "data/2011 Insured Rates.csv")
 
 Insured.Rates.12 <- read.socrata(paste0(url_base,
                                         "question=Do you have any kind of health care coverage?",
@@ -34,7 +34,7 @@ Insured.Rates.12 <- read.socrata(paste0(url_base,
 
 Insured.Rates.12 <- Insured.Rates.12[, c("locationabbr", "confidence_limit_low", "data_value", "confidence_limit_high", "sample_size")]
 colnames(Insured.Rates.12) <- c("State", "CI.LB", "Estimate", "CI.UB", "Sample.Size")
-write.csv(Insured.Rates.12, "2012 Insured Rates.csv")
+write.csv(Insured.Rates.12, "data/2012 Insured Rates.csv")
 
 Insured.Rates.13 <- read.socrata(paste0(url_base,
                                         "question=Do you have any kind of health care coverage?",
@@ -45,7 +45,7 @@ Insured.Rates.13 <- read.socrata(paste0(url_base,
 
 Insured.Rates.13 <- Insured.Rates.13[, c("locationabbr", "confidence_limit_low", "data_value", "confidence_limit_high", "sample_size")]
 colnames(Insured.Rates.13) <- c("State", "CI.LB", "Estimate", "CI.UB", "Sample.Size")
-write.csv(Insured.Rates.13, "2013 Insured Rates.csv")
+write.csv(Insured.Rates.13, "data/2013 Insured Rates.csv")
 
 Insured.Rates.14 <- read.socrata(paste0(url_base,
                                         "question=Do you have any kind of health care coverage?",
@@ -56,7 +56,7 @@ Insured.Rates.14 <- read.socrata(paste0(url_base,
 
 Insured.Rates.14 <- Insured.Rates.14[, c("locationabbr", "confidence_limit_low", "data_value", "confidence_limit_high", "sample_size")]
 colnames(Insured.Rates.14) <- c("State", "CI.LB", "Estimate", "CI.UB", "Sample.Size")
-write.csv(Insured.Rates.14, "2014 Insured Rates.csv")
+write.csv(Insured.Rates.14, "data/2014 Insured Rates.csv")
 
 Insured.Rates.15 <- read.socrata(paste0(url_base,
                                         "question=Do you have any kind of health care coverage?",
@@ -67,17 +67,17 @@ Insured.Rates.15 <- read.socrata(paste0(url_base,
 
 Insured.Rates.15 <- Insured.Rates.15[, c("locationabbr", "confidence_limit_low", "data_value", "confidence_limit_high", "sample_size")]
 colnames(Insured.Rates.15) <- c("State", "CI.LB", "Estimate", "CI.UB", "Sample.Size")
-write.csv(Insured.Rates.15, "2015 Insured Rates.csv")
+write.csv(Insured.Rates.15, "data/2015 Insured Rates.csv")
 
 ```
 
 ```{r, include=F}
 
-Insured.Rates.11 <- read.csv("2011 Insured Rates.csv")[,2:6]
-Insured.Rates.12 <- read.csv("2012 Insured Rates.csv")[,2:6]
-Insured.Rates.13 <- read.csv("2013 Insured Rates.csv")[,2:6]
-Insured.Rates.14 <- read.csv("2014 Insured Rates.csv")[,2:6]
-Insured.Rates.15 <- read.csv("2015 Insured Rates.csv")[,2:6]
+Insured.Rates.11 <- read.csv("data/2011 Insured Rates.csv")[,2:6]
+Insured.Rates.12 <- read.csv("data/2012 Insured Rates.csv")[,2:6]
+Insured.Rates.13 <- read.csv("data/2013 Insured Rates.csv")[,2:6]
+Insured.Rates.14 <- read.csv("data/2014 Insured Rates.csv")[,2:6]
+Insured.Rates.15 <- read.csv("data/2015 Insured Rates.csv")[,2:6]
 
 National.IR_calc <- function(x, alpha = 0.05){
   
@@ -374,7 +374,7 @@ removed.vals <- matrix(c(n, nc, (n-nc), ((n-nc)/n)*100), nrow = 5, ncol = 4,
                        dimnames = list(c("2011", "2012", "2013", "2014", "2015"),
                                        c("Total Before Cleaning", "Total After Cleaning", "Number Removed", "Percentage Removed"))
                        )
-write.csv(removed.vals, "removedvaluestable.csv")
+write.csv(removed.vals, "data/removedvaluestable.csv")
 
 ## splitting data sets
 
@@ -409,29 +409,29 @@ t15.data.fit <-              t15.data[sf, ]
 t15.data.test <-             t15.data[st, ]
 
 
-write.csv(t11.data[,1:4], 'Cleaned 2011 BRFSS Data.csv')
-write.csv(t12.data[,1:4], 'Cleaned 2012 BRFSS Data.csv')
-write.csv(t13.data[,1:4], 'Cleaned 2013 BRFSS Data.csv')
-write.csv(t14.data[,1:4], 'Cleaned 2014 BRFSS Data.csv')
-write.csv(t15.data[,1:4], 'Cleaned 2015 BRFSS Data.csv')
+write.csv(t11.data[,1:4], 'data/Cleaned 2011 BRFSS Data.csv')
+write.csv(t12.data[,1:4], 'data/Cleaned 2012 BRFSS Data.csv')
+write.csv(t13.data[,1:4], 'data/Cleaned 2013 BRFSS Data.csv')
+write.csv(t14.data[,1:4], 'data/Cleaned 2014 BRFSS Data.csv')
+write.csv(t15.data[,1:4], 'data/Cleaned 2015 BRFSS Data.csv')
 
-write.csv(t11.data.fit[,1:4], 'Cleaned 2011 BRFSS Data for Fitting.csv')
-write.csv(t12.data.fit[,1:4], 'Cleaned 2012 BRFSS Data for Fitting.csv')
-write.csv(t13.data.fit[,1:4], 'Cleaned 2013 BRFSS Data for Fitting.csv')
-write.csv(t14.data.fit[,1:4], 'Cleaned 2014 BRFSS Data for Fitting.csv')
-write.csv(t15.data.fit[,1:4], 'Cleaned 2015 BRFSS Data for Fitting.csv')
+write.csv(t11.data.fit[,1:4], 'data/Cleaned 2011 BRFSS Data for Fitting.csv')
+write.csv(t12.data.fit[,1:4], 'data/Cleaned 2012 BRFSS Data for Fitting.csv')
+write.csv(t13.data.fit[,1:4], 'data/Cleaned 2013 BRFSS Data for Fitting.csv')
+write.csv(t14.data.fit[,1:4], 'data/Cleaned 2014 BRFSS Data for Fitting.csv')
+write.csv(t15.data.fit[,1:4], 'data/Cleaned 2015 BRFSS Data for Fitting.csv')
 
-write.csv(t11.data.test[,1:4], 'Cleaned 2011 BRFSS Data for Testing.csv')
-write.csv(t12.data.test[,1:4], 'Cleaned 2012 BRFSS Data for Testing.csv')
-write.csv(t13.data.test[,1:4], 'Cleaned 2013 BRFSS Data for Testing.csv')
-write.csv(t14.data.test[,1:4], 'Cleaned 2014 BRFSS Data for Testing.csv')
-write.csv(t15.data.test[,1:4], 'Cleaned 2015 BRFSS Data for Testing.csv')
+write.csv(t11.data.test[,1:4], 'data/Cleaned 2011 BRFSS Data for Testing.csv')
+write.csv(t12.data.test[,1:4], 'data/Cleaned 2012 BRFSS Data for Testing.csv')
+write.csv(t13.data.test[,1:4], 'data/Cleaned 2013 BRFSS Data for Testing.csv')
+write.csv(t14.data.test[,1:4], 'data/Cleaned 2014 BRFSS Data for Testing.csv')
+write.csv(t15.data.test[,1:4], 'data/Cleaned 2015 BRFSS Data for Testing.csv')
 
-t11.data <- data.frame(read.csv("Cleaned 2011 BRFSS Data for Fitting.csv"))[,2:5]
-t12.data <- data.frame(read.csv("Cleaned 2012 BRFSS Data for Fitting.csv"))[,2:5]
-t13.data <- data.frame(read.csv("Cleaned 2013 BRFSS Data for Fitting.csv"))[,2:5]
-t14.data <- data.frame(read.csv("Cleaned 2014 BRFSS Data for Fitting.csv"))[,2:5]
-t15.data <- data.frame(read.csv("Cleaned 2015 BRFSS Data for Fitting.csv"))[,2:5]
+t11.data <- data.frame(read.csv("data/Cleaned 2011 BRFSS Data for Fitting.csv"))[,2:5]
+t12.data <- data.frame(read.csv("data/Cleaned 2012 BRFSS Data for Fitting.csv"))[,2:5]
+t13.data <- data.frame(read.csv("data/Cleaned 2013 BRFSS Data for Fitting.csv"))[,2:5]
+t14.data <- data.frame(read.csv("data/Cleaned 2014 BRFSS Data for Fitting.csv"))[,2:5]
+t15.data <- data.frame(read.csv("data/Cleaned 2015 BRFSS Data for Fitting.csv"))[,2:5]
 
 ```
 
@@ -439,7 +439,7 @@ t15.data <- data.frame(read.csv("Cleaned 2015 BRFSS Data for Fitting.csv"))[,2:5
 
 ```{r, include=F}
 
-removed.vals <- read.csv("removedvaluestable.csv")
+removed.vals <- read.csv("data/removedvaluestable.csv")
 
 ```
 
@@ -534,41 +534,41 @@ t12.counts <- counter(t12.data)
 t13.counts <- counter(t13.data)
 t14.counts <- counter(t14.data)
 t15.counts <- counter(t15.data)
-AY.counts <- t11.counts + t12.counts + t13.counts + t14.counts + t15.counts
+AY.counts <- t15.counts + t12.counts + t13.counts + t14.counts + t15.counts
 AY.counts[,4] <- AY.counts[,4]/5
 
-write.csv(t11.counts, "2011 counts.csv")
-write.csv(t12.counts, "2012 counts.csv")
-write.csv(t13.counts, "2013 counts.csv")
-write.csv(t14.counts, "2014 counts.csv")
-write.csv(t15.counts, "2015 counts.csv")
-write.csv(AY.counts, "All Year counts.csv")
+write.csv(t11.counts, "data/2011 counts.csv")
+write.csv(t12.counts, "data/2012 counts.csv")
+write.csv(t13.counts, "data/2013 counts.csv")
+write.csv(t14.counts, "data/2014 counts.csv")
+write.csv(t15.counts, "data/2015 counts.csv")
+write.csv(AY.counts, "data/All Year counts.csv")
 
 ```
 
 ```{r, include=F}
 
-t11.counts <- read.csv("2011 counts.csv")
+t11.counts <- read.csv("data/2011 counts.csv")
 rownames(t11.counts) <- t11.counts[,1]
 t11.counts <- t11.counts[,2:5]
 
-t12.counts <- read.csv("2012 counts.csv")
+t12.counts <- read.csv("data/2012 counts.csv")
 rownames(t12.counts) <- t12.counts[,1]
 t12.counts <- t12.counts[,2:5]
 
-t13.counts <- read.csv("2013 counts.csv")
+t13.counts <- read.csv("data/2013 counts.csv")
 rownames(t13.counts) <- t13.counts[,1]
 t13.counts <- t13.counts[,2:5]
 
-t14.counts <- read.csv("2014 counts.csv")
+t14.counts <- read.csv("data/2014 counts.csv")
 rownames(t14.counts) <- t14.counts[,1]
 t14.counts <- t14.counts[,2:5]
 
-t15.counts <- read.csv("2015 counts.csv")
+t15.counts <- read.csv("data/2015 counts.csv")
 rownames(t15.counts) <- t15.counts[,1]
 t15.counts <- t15.counts[,2:5]
 
-AY.counts <- read.csv("All Year counts.csv")
+AY.counts <- read.csv("data/All Year counts.csv")
 rownames(AY.counts) <- AY.counts[,1]
 AY.counts <- AY.counts[,2:5]
 
@@ -642,28 +642,105 @@ pandoc.table(x[1:3],
 
 Since we are including all 50 states, the Distric of Colombia, Puerto Rico, and Guam we have 53 observations for each year.
 
-  Figure 3 below plots the standardized personal doctor counts against the standardized insurance counts for each state for all years combined. It appears there is a postitive correlation between the personal doctor counts and insurance counts.
+  Figure 3 below plots the standardized personal doctor counts against the standardized insurance counts for each state. The figure gives plots for each year, all years combined, the five year averages for each state, and the difference between 2015 and 2011. From all these plots it is clear that there is a positive correlation between the standardized counts of individuals with a personal doctor and the the standardized insured rate. Notice that the spread of points for the five year average is much less than that for each individual year. This makes theoretical sense, since we expect variance to be reduced when we take an average.
   
 ***
   
 ```{r, include=F}
 
-png("plots/AY_counts.png",
-     height = 400, width = 480)
- 
-plot(AY.std$Insurance.Count, AY.std$Personal.Doctor.Count,
-     ylim = c(70, 85),
-     xlim = c(80, 90),
-     main = "Personal Doctor counts v.s. Insurance Counts",
+png("plots/counts_vs_insur.png",
+    height = 768, width = 744)
+
+par(mar = c(5.1, 4.1, 2.1, 2.1), oma = c(0,0,3,0))
+layout(matrix(c(1,1,2,2,3,3,4,4,5,5,6,6,7,7,0,8,8,8), 3, 6, byrow = TRUE))
+
+
+plot(t11.std$Insurance.Count, t11.std$Personal.Doctor.Count,
+     ylim = c(60, 90),
+     xlim = c(65, 100),
+     main = "2011",
+     ylab = "Standardized Personal Doctor Counts",
+     xlab = "Standardized Insurance Counts",  
+     cex.lab = 1.2, cex.main = 1.2, pch = 20, col = "darkmagenta")
+
+plot(t12.std$Insurance.Count, t12.std$Personal.Doctor.Count,
+     ylim = c(60, 90),
+     xlim = c(65, 100),
+     main = "2012",
      ylab = "Standardized Personal Doctor Counts",
      xlab = "Standardized Insurance Counts",
-     cex.lab = .9, cex.main = 1 )
+     cex.lab = 1, cex.main = 1.2, pch = 20, col = "blue")
+
+plot(t13.std$Insurance.Count, t13.std$Personal.Doctor.Count,
+     ylim = c(60, 90),
+     xlim = c(65, 100),
+     main = "2013",
+     ylab = "Standardized Personal Doctor Counts",
+     xlab = "Standardized Insurance Counts",
+     cex.lab = 1.2, cex.main = 1.2, pch = 20, col = "green")
+
+plot(t14.std$Insurance.Count, t14.std$Personal.Doctor.Count,
+     ylim = c(60, 90),
+     xlim = c(65, 100),
+     main = "2014",
+     ylab = "Standardized Personal Doctor Counts",
+     xlab = "Standardized Insurance Counts",
+     cex.lab = 1.2, cex.main = 1.2, pch = 20, col = "orange")
+
+plot(t15.std$Insurance.Count, t15.std$Personal.Doctor.Count,
+     ylim = c(60, 90),
+     xlim = c(65, 100),
+     main = "2015",
+     ylab = "Standardized Personal Doctor Counts",
+     xlab = "Standardized Insurance Counts",
+     cex.lab = 1.2, cex.main = 1.2, pch = 20, col = "red")
+
+plot(t11.std$Insurance.Count, t11.std$Personal.Doctor.Count,
+     ylim = c(60, 90),
+     xlim = c(65, 100),
+     main = "2011 to 2015",
+     ylab = "Standardized Personal Doctor Counts",
+     xlab = "Standardized Insurance Counts",
+     cex.lab = 1.2, cex.main = 1.2, pch = 20, col = "darkmagenta")
+
+points(t12.std$Insurance.Count, t12.std$Personal.Doctor.Count,
+       pch = 20, col = "blue")
+
+points(t13.std$Insurance.Count, t13.std$Personal.Doctor.Count,
+       pch = 20, col = "green")
+
+
+points(t14.std$Insurance.Count, t14.std$Personal.Doctor.Count,
+       pch = 20, col = "orange")
+
+points(t15.std$Insurance.Count, t15.std$Personal.Doctor.Count,
+       pch = 20, col = "red")
+
+plot(AY.std$Insurance.Count, AY.std$Personal.Doctor.Count,
+     ylim = c(60, 90),
+     xlim = c(65, 100),
+     main = "Five Year Average",
+     ylab = "Standardized Personal Doctor Counts",
+     xlab = "Standardized Insurance Counts",
+     cex.lab = 1.2, cex.main = 1.2, pch = 20)
+
+
+plot(t15.std$Insurance.Count - t11.std$Insurance.Count, 
+     t15.std$Personal.Doctor.Count - t11.std$Personal.Doctor.Count,
+     ylim = c(-25, 20),
+     xlim = c(-15, 20),
+     main = "Change between 2011 and 2015",
+     ylab = "Difference in Personal Doctor Counts",
+     xlab = "Difference in Insured Counts",
+     cex.lab = 1.2, cex.main = 1.2, pch = 20)
+
+mtext('Personal Doctor Counts v.s. Insurance Counts', outer = TRUE, font = 2, padj = -1, cex = 1.2)
 
 dev.off()
 
 ```
 
-![**Figure 3:** The plot above shows the standardized personal doctor counts plotted against the standardized insurance counts. These are the counts for all years combined.](plots/AY_counts.png)
+![**Figure 3:** The plot above shows the standardized personal doctor counts plotted against the standardized insurance counts. The points in blue correspond to data from 2011, cyan from 2012, green from 2013, orange from 2014, and red from 2015. The first five plots show each of these years individually while the sixth plot shows all the years combined. From the 6th plot it appears that there is a general shift upwards to the left which would correspond with increaseing insured rates and increasing counts of individuals with a personal doctor. The 7th plot shows the 2011 to 2015 average for all states. Note that the spread of the data is much decreased in the 7th plot. The 8th plot shows the difference in personal doctor counts and insurance counts between 2015 and 2011 for each state.](plots/counts_vs_insur.png)
 
 ***
 <br>
@@ -673,7 +750,7 @@ dev.off()
 
 ### Model Fitting and Diagnostics
 
-  To fit our Poisson models, we will use the built in R function for fitting generlized linear models ("glm()"). We will fit one model for each year and then one model for all years combined. The model for all years combined will still be fit using only 53 observations because each state still only counts for 1 observation. We cannot count different years for the same state as different observations because we cannot reasonably assume that these observations would be independent. Instead, for each state we pool all the counts from different years.
+  To fit our Poisson models, we will use the built in R function for fitting generlized linear models ("glm()"). We will fit one model for each year and then one model for all years combined (five year averages). The model for the five year averages will still be fit using only 53 observations because each state still only counts for 1 observation. We do this because we cannot count different years for the same state as different observations because we cannot reasonably assume that these observations would be independent. Figure 4 shows the fitted log-linear models over scatterplots of the data.
   
 ```{r, include=F}
 
@@ -686,7 +763,6 @@ AY.glm <- glm(Personal.Doctor.Count ~ Insurance.Count, family = poisson, data = 
 
 ```
 
-
 ```{r, include=F}
 
 library(AER)
@@ -698,8 +774,6 @@ dispersiontest(t15.glm, alternative = "two.sided")
 dispersiontest(AY.glm, alternative = "two.sided")
 
 ```
-  
-  After fitting our models we used the dispersion test ("dispersiontest()") from the Applied Econometrics with R ("AER") package to test if our data was over- or under-dispersed for a Poisson distribution. We found that our data for each model was significantly underdispersed. To correct for this, we refit the model using the "quasipoisson" family option which uses a Poisson distribution with an estimated dispersion parameter. This does not effect the estimates of the regression parameters, but it does effect the estimated standard errors of said parameters. In our case, since our data were under-dispersed, our estimated standard errors decreased. Table 5 below reports the estimated regression coefficient and estimated coefficient standard error for each model.
 
 ```{r, include=F}
 
@@ -720,22 +794,112 @@ sumAY <- summary(AY.glm)
 ```
 
 ***
+  
+```{r, include = F}
+
+
+png("plots/models.png",
+    height = 620, width = 960)
+
+par(mfrow = c(2,3), mar = c(5.1, 4.1, 2.1, 2.1), oma = c(0,0,3,0))
+#layout(matrix(c(1,1,2,2,3,3,4,4,5,5,6,6,7,7,0,8,8,8), 3, 6, byrow = TRUE))
+
+
+plot(t11.std$Insurance.Count, t11.std$Personal.Doctor.Count,
+     ylim = c(60, 90),
+     xlim = c(65, 100),
+     main = "2011",
+     ylab = "Standardized Personal Doctor Counts",
+     xlab = "Standardized Insurance Counts",
+     cex.lab = 1.2, cex.main = 1.2, pch = 20, col = "darkmagenta")
+curve(exp(sumt11$coefficients[1,1] + sumt11$coefficients[2,1]*x), n = 1000, from = 60, to = 105, add = T)
+
+plot(t12.std$Insurance.Count, t12.std$Personal.Doctor.Count,
+     ylim = c(60, 90),
+     xlim = c(65, 100),
+     main = "2012",
+     ylab = "Standardized Personal Doctor Counts",
+     xlab = "Standardized Insurance Counts",
+     cex.lab = 1, cex.main = 1.2, pch = 20, col = "blue")
+curve(exp(sumt12$coefficients[1,1] + sumt12$coefficients[2,1]*x), n = 1000, from = 60, to = 105, add = T)
+
+plot(t13.std$Insurance.Count, t13.std$Personal.Doctor.Count,
+     ylim = c(60, 90),
+     xlim = c(65, 100),
+     main = "2013",
+     ylab = "Standardized Personal Doctor Counts",
+     xlab = "Standardized Insurance Counts",
+     cex.lab = 1.2, cex.main = 1.2, pch = 20, col = "green")
+curve(exp(sumt13$coefficients[1,1] + sumt13$coefficients[2,1]*x), n = 1000, from = 60, to = 105, add = T)
+
+plot(t14.std$Insurance.Count, t14.std$Personal.Doctor.Count,
+     ylim = c(60, 90),
+     xlim = c(65, 100),
+     main = "2014",
+     ylab = "Standardized Personal Doctor Counts",
+     xlab = "Standardized Insurance Counts",
+     cex.lab = 1.2, cex.main = 1.2, pch = 20, col = "orange")
+curve(exp(sumt14$coefficients[1,1] + sumt14$coefficients[2,1]*x), n = 1000, from = 60, to = 105, add = T)
+
+plot(t15.std$Insurance.Count, t15.std$Personal.Doctor.Count,
+     ylim = c(60, 90),
+     xlim = c(65, 100),
+     main = "2015",
+     ylab = "Standardized Personal Doctor Counts",
+     xlab = "Standardized Insurance Counts",
+     cex.lab = 1.2, cex.main = 1.2, pch = 20, col = "red")
+curve(exp(sumt15$coefficients[1,1] + sumt15$coefficients[2,1]*x), n = 1000, from = 60, to = 105, add = T)
+
+plot(AY.std$Insurance.Count, AY.std$Personal.Doctor.Count,
+     ylim = c(60, 90),
+     xlim = c(65, 100),
+     main = "Five Year Average",
+     ylab = "Standardized Personal Doctor Counts",
+     xlab = "Standardized Insurance Counts",
+     cex.lab = 1.2, cex.main = 1.2, pch = 20)
+curve(exp(sumAY$coefficients[1,1] + sumAY$coefficients[2,1]*x), n = 1000, from = 60, to = 105, add = T)
+
+mtext('Fitted Models and Observed Data', outer = TRUE, font = 2, padj = -1, cex = 1.2)
+
+dev.off()
+
+
+```
+
+![**Figure 4:** Log-linear models of standardized personal doctor counts regressed onto standardized insured rates.](plots/models.png)
+
+***
+<br>
+  
+  After fitting our models we used the dispersion test ("dispersiontest()") from the Applied Econometrics with R ("AER") package to test if our data was over- or under-dispersed for a Poisson distribution. We found that our data for each model was significantly underdispersed. To correct for this, we refit the model using the "quasipoisson" family option which uses a Poisson distribution with an estimated dispersion parameter. This does not effect the estimates of the regression parameters, but it does effect the estimated standard errors of said parameters. In our case, since our data were under-dispersed, our estimated standard errors decreased. Table 5 below reports the estimated model parameters, their standard errors, and their p-values.
+
+***
 
 ```{r, echo=F, results="asis"}
 
-x <- matrix(c(sumt11$coefficients[2,1], sumt11$coefficients[2,2], sumt11$coefficients[2,4],
+x <- matrix(c(sumt11$coefficients[1,1], sumt11$coefficients[1,2], sumt11$coefficients[1,4],
+              sumt11$coefficients[2,1], sumt11$coefficients[2,2], sumt11$coefficients[2,4],
+              sumt12$coefficients[1,1], sumt12$coefficients[1,2], sumt12$coefficients[1,4],
               sumt12$coefficients[2,1], sumt12$coefficients[2,2], sumt12$coefficients[2,4],
+              sumt13$coefficients[1,1], sumt13$coefficients[1,2], sumt13$coefficients[1,4],
               sumt13$coefficients[2,1], sumt13$coefficients[2,2], sumt13$coefficients[2,4],
+              sumt14$coefficients[1,1], sumt14$coefficients[1,2], sumt14$coefficients[1,4],
               sumt14$coefficients[2,1], sumt14$coefficients[2,2], sumt14$coefficients[2,4],
+              sumt15$coefficients[1,1], sumt15$coefficients[1,2], sumt15$coefficients[1,4],
               sumt15$coefficients[2,1], sumt15$coefficients[2,2], sumt15$coefficients[2,4],
+              sumAY$coefficients[1,1], sumAY$coefficients[1,2], sumAY$coefficients[1,4],
               sumAY$coefficients[2,1], sumAY$coefficients[2,2], sumAY$coefficients[2,4]
-              ), nrow = 6, ncol = 3, byrow = T)
+              ), nrow = 12, ncol = 3, byrow = T)
 
-colnames(x) <- c("Fitted Regression Coefficient", "Standard Error", "P-value")
-rownames(x) <- c("2011", "2012", "2013", "2014", "2015", "All Years")
+x <- data.frame(x)
+
+x <- cbind(rep(c("Intercept", "Slope"), 6), x)
+
+colnames(x) <- c("", "Estimate", "Standard Error", "P-value")
+rownames(x) <- c("2011", "", "2012", " ", "2013", "   ", "2014", "     ", "2015", "      ", "Five Year Average", "       ")
 
 pandoc.table(x,
-             caption = "**Table 5:** Estimated regression coefficients, standard errors, and p-values for each fitted model.",
+             caption = "**Table 5:** Estimated model parameters, standard errors, and p-values for each fitted model.",
              split.table = Inf)
 ```
   
@@ -806,7 +970,7 @@ abline(h=0)
 plot(AY.glm$fitted.values,  AY.std$Personal.Doctor.Count - AY.glm$fitted.values,
      ylim = c(-10, 10),
      xlim = c(70, 85),
-     main = "All Years",
+     main = "Five Year Average",
      ylab = "Residuals",
      xlab = "Fitted Values",
      cex.lab = 1.1, cex.main = 1.2 )
@@ -826,7 +990,7 @@ dev.off()
 
 #### Global Fit Tests
 <br>
-  For global fit tests we are testing the null hypothesis that the model fits the data to the alternative hypothesis that the model does not fit the data and there is significant lack of fit. We performed two global fit tests for each model, the Pearson test and the likelihood ratio test. All six of our models passed both tests, indicating that there is not significant lack-of-fit.
+  For global fit tests we are testing the null hypothesis that the model fits the data to the alternative hypothesis that the model does not fit the data and there is significant lack of fit. We performed two global fit tests for each model, the Pearson test and the likelihood ratio test. All six of our models passed both tests, indicating that there is no significant lack-of-fit.
 
 ##### Pearson Goodness-of-Fit Test
 
@@ -873,7 +1037,7 @@ x <- rbind(Pearson.Global.Fit(t11.glm$fitted.values, t11.std$Personal.Doctor.Cou
            Pearson.Global.Fit(t15.glm$fitted.values, t15.std$Personal.Doctor.Count),
            Pearson.Global.Fit(AY.glm$fitted.values, AY.std$Personal.Doctor.Count)
            )
-rownames(x) <- c("2011", "2012", "2013", "2014", "2015", "All Years")
+rownames(x) <- c("2011", "2012", "2013", "2014", "2015", "Five Year Average")
 
 pandoc.table(x,
              caption = "**Table 6:** Pearson goodness-of-fit test-statistics and p-values for each model",
@@ -932,7 +1096,7 @@ x <- rbind(LR.Global.Fit(t11.glm$fitted.values, t11.std$Personal.Doctor.Count),
            LR.Global.Fit(t15.glm$fitted.values, t15.std$Personal.Doctor.Count),
            LR.Global.Fit(AY.glm$fitted.values, AY.std$Personal.Doctor.Count)
            )
-rownames(x) <- c("2011", "2012", "2013", "2014", "2015", "All Years")
+rownames(x) <- c("2011", "2012", "2013", "2014", "2015", "Five Year Average")
 
 pandoc.table(x,
              caption = "**Table 7:** Likelihood ratio goodness-of-fit test-statistics and p-values for each model",
@@ -952,7 +1116,9 @@ pandoc.table(x,
   
   $$ TS = \text{Deviance}_{null} - \text{Deviance}_{fitted} \sim{\chi_1^2} $$
 
-  We can use the "summary()" function to find the deviance of each of our fitted models and their corresponding null models. Table 8 below reports the test-statistics and p-values for each of our models. For the models for each year, the p-values were all less than .01. This indicates that even at a 99% percent significance level we should reject the null hypothesis that the fitted model gives no better fit than the null model and concluded that the fitted model does indeed provide better fit. However, for the model for all years pooled together the p-value was 0.20 indicating that we should *fail* to reject the null hypothesis and concluded that when looking at all years combined the fitted model does give significantly better fit than the null model.
+  We can use the "summary()" function to find the deviance of each of our fitted models and their corresponding null models. Table 8 below reports the test-statistics and p-values for each of our models. For the models for each year, the p-values were all less than .01. This indicates that even at a 99% percent significance level we should reject the null hypothesis that the fitted model gives no better fit than the null model and concluded that the fitted model does indeed provide better fit. However, for the model for five year averages the p-value was 0.20 indicating that we should *fail* to reject the null hypothesis and concluded that when looking at the averages over all years the fitted model does not give significantly better fit than the null model. 
+
+  The finding that the fitted model for the five year averages does not give significantly better fit than the null model should not be troubling. If we look back at the plot of the five year averages in figure 3 we can see that the spread of the data is much less than that for any individual year. This means that each data point does not stray far from the global mean. If we recall that the null model is a horizontal line through the global mean it is now clear why the deviance between the fitted model and the null model is much less when looking at the five year average: all points lie relatively close to the global mean. This is effect occurs because taking the average over five years greatly reduces the variance of the data set.
   
 ```{r, echo=FALSE}
 
@@ -981,7 +1147,7 @@ x <- rbind(Comp.Fit.mod(sumt11),
            Comp.Fit.mod(sumt15),
            Comp.Fit.mod(sumAY)
            )
-rownames(x) <- c("2011", "2012", "2013", "2014", "2015", "All Years")
+rownames(x) <- c("2011", "2012", "2013", "2014", "2015", "Five Year Average")
 
 pandoc.table(x,
              caption = "**Table 8:** Comparative fit test-statistics and p-values for each model",
@@ -1008,11 +1174,11 @@ pandoc.table(x,
   
 ```{r, include=F, eval=F}
 
-t11.data.test <- data.frame(read.csv("Cleaned 2011 BRFSS Data for Testing.csv"))[,2:5]
-t12.data.test <- data.frame(read.csv("Cleaned 2012 BRFSS Data for Testing.csv"))[,2:5]
-t13.data.test <- data.frame(read.csv("Cleaned 2013 BRFSS Data for Testing.csv"))[,2:5]
-t14.data.test <- data.frame(read.csv("Cleaned 2014 BRFSS Data for Testing.csv"))[,2:5]
-t15.data.test <- data.frame(read.csv("Cleaned 2015 BRFSS Data for Testing.csv"))[,2:5]
+t11.data.test <- data.frame(read.csv("data/Cleaned 2011 BRFSS Data for Testing.csv"))[,2:5]
+t12.data.test <- data.frame(read.csv("data/Cleaned 2012 BRFSS Data for Testing.csv"))[,2:5]
+t13.data.test <- data.frame(read.csv("data/Cleaned 2013 BRFSS Data for Testing.csv"))[,2:5]
+t14.data.test <- data.frame(read.csv("data/Cleaned 2014 BRFSS Data for Testing.csv"))[,2:5]
+t15.data.test <- data.frame(read.csv("data/Cleaned 2015 BRFSS Data for Testing.csv"))[,2:5]
 
 t11.counts.t <- counter(t11.data.test)
 t12.counts.t <- counter(t12.data.test)
@@ -1022,38 +1188,38 @@ t15.counts.t <- counter(t15.data.test)
 AY.counts.t <- t11.counts.t + t12.counts.t + t13.counts.t + t14.counts.t + t15.counts.t
 AY.counts.t[,4] <- AY.counts.t[,4]/5
 
-write.csv(t11.counts.t, "2011 test counts.csv")
-write.csv(t12.counts.t, "2012 test counts.csv")
-write.csv(t13.counts.t, "2013 test counts.csv")
-write.csv(t14.counts.t, "2014 test counts.csv")
-write.csv(t15.counts.t, "2015 test counts.csv")
-write.csv(AY.counts.t, "All Year test counts.csv")
+write.csv(t11.counts.t, "data/2011 test counts.csv")
+write.csv(t12.counts.t, "data/2012 test counts.csv")
+write.csv(t13.counts.t, "data/2013 test counts.csv")
+write.csv(t14.counts.t, "data/2014 test counts.csv")
+write.csv(t15.counts.t, "data/2015 test counts.csv")
+write.csv(AY.counts.t, "data/All Year test counts.csv")
 
 ```
 
 ```{r, include=F}
 
-t11.counts.t <- read.csv("2011 test counts.csv")
+t11.counts.t <- read.csv("data/2011 test counts.csv")
 rownames(t11.counts.t) <- t11.counts.t[,1]
 t11.counts.t <- t11.counts.t[,2:5]
 
-t12.counts.t <- read.csv("2012 test counts.csv")
+t12.counts.t <- read.csv("data/2012 test counts.csv")
 rownames(t12.counts.t) <- t12.counts.t[,1]
 t12.counts.t <- t12.counts.t[,2:5]
 
-t13.counts.t <- read.csv("2013 test counts.csv")
+t13.counts.t <- read.csv("data/2013 test counts.csv")
 rownames(t13.counts.t) <- t13.counts.t[,1]
 t13.counts.t <- t13.counts.t[,2:5]
 
-t14.counts.t <- read.csv("2014 test counts.csv")
+t14.counts.t <- read.csv("data/2014 test counts.csv")
 rownames(t14.counts.t) <- t14.counts.t[,1]
 t14.counts.t <- t14.counts.t[,2:5]
 
-t15.counts.t <- read.csv("2015 test counts.csv")
+t15.counts.t <- read.csv("data/2015 test counts.csv")
 rownames(t15.counts.t) <- t15.counts.t[,1]
 t15.counts.t <- t15.counts.t[,2:5]
 
-AY.counts.t <- read.csv("All Year test counts.csv")
+AY.counts.t <- read.csv("data/All Year test counts.csv")
 rownames(AY.counts.t) <- AY.counts.t[,1]
 AY.counts.t <- AY.counts.t[,2:5]
 
@@ -1102,7 +1268,7 @@ x <- rbind(Pearson.Global.Fit(p11, t11.stdt$Personal.Doctor.Count),
            Pearson.Global.Fit(p15, t15.stdt$Personal.Doctor.Count),
            Pearson.Global.Fit(pAY, AY.stdt$Personal.Doctor.Count)
            )
-rownames(x) <- c("2011", "2012", "2013", "2014", "2015", "All Years")
+rownames(x) <- c("2011", "2012", "2013", "2014", "2015", "Five Year Average")
 
 pandoc.table(x,
              caption = "**Table 9:** Pearson goodness-of-fit test-statistics and p-values for each model calculated using the testing half of the data sets.",
@@ -1121,7 +1287,7 @@ x <- rbind(LR.Global.Fit(p11, t11.stdt$Personal.Doctor.Count),
            LR.Global.Fit(p15, t15.stdt$Personal.Doctor.Count),
            LR.Global.Fit(pAY, AY.stdt$Personal.Doctor.Count)
            )
-rownames(x) <- c("2011", "2012", "2013", "2014", "2015", "All Years")
+rownames(x) <- c("2011", "2012", "2013", "2014", "2015", "Five Year Average")
 
 pandoc.table(x,
              caption = "**Table 10:** Likelihood ratio goodness-of-fit test-statistics and p-values for each model calculated using the testing half of the data sets.",
@@ -1132,3 +1298,177 @@ pandoc.table(x,
 <br>
 
 ***
+
+<br>
+
+  Next we will measure the predictive power of our models using the concordance statistic Goodman and Kruskal's gamma. To do this we first predict the number of personal doctor counts for each observation in each testing data set using the corresponding model. Then we use the predicted number of personal doctor counts and observed number of personal doctor counts for each observation to calculate the number of concordant and discordant pairs of obervations in the data set. A concordant pair is a pair of observations where one observation has both a high predicted personal doctor count and observed personal doctor count than the other. A discordant pair is when one observation has a higher predicted personal doctor count but lower observed personal doctor count, or vice versa.
+  
+  The Goodman and Kruskal's gamma statistic is calculated as the difference between the number of concordant and discordant pairs divided by the total number of concordant or discordant pairs:
+  
+  $$\widehat{\gamma}  = \frac{C - D}{C + D}$$
+  
+  Gamma can range from -1 to 1, with negative values indicating more discordant than concordant pairs and positive values indicating more concordant pairs. In our case, a gamma value greater than 1 indicates a degree of predictive power, the closer to one the better. An approximate standard error for gamma is given by:
+
+$$\widehat{SE}[\gamma] = \sqrt{\frac{n(1 - \widehat{\gamma}^2)}{C + D}} \\ \text{where} \space \space \space n = \text{total number of observations}$$
+
+  We will use this approximate standard error to calculate approximate 95% confidence intervals for gamma. We created the R function below to calculate gamma and it's confidence interval. The confidence intervals are relatively large but none of them includes zero, indicating that our models do have some degree of predictive power.
+
+```{r}
+# Function takes observed values, fitted values, and desired alpha level as arguments
+
+GK.gamma <- function(obs, fit, alpha = 0.05){
+  
+  z <- qnorm(alpha/2, lower.tail = F)
+  n <- length(obs)
+  data <- rbind(obs, fit)
+  
+  C <- 0
+  D <- 0
+  for(i in 1:(n-1)){
+    o <- data[1,i]
+    f <- data[2,i]
+    for(j in (i+1):n){
+      if(o < data[1,j] & f < data[2,j]){
+        C <- C + 1
+      }
+      else if(o > data[1,j] & f > data[2,j]){
+        C <- C + 1
+      }
+      else if(o > data[1,j] & f < data[2,j]){
+        D <- D + 1
+      }
+      else if(o < data[1,j] & f > data[2,j]){
+        D <- D + 1
+      }
+    }
+  }
+  
+  gama <- (C - D) / (C + D)
+  
+  SE.gama <- sqrt( n*(1-gama^2)/(C+D) )
+  
+  G.LB <- gama - z*SE.gama
+  G.UB <- gama + z*SE.gama
+  
+  out <- c(G.LB, gama, G.UB)
+  
+  out
+}
+
+
+```
+  
+  Table 11 gives the estimated gamma and 95% confidence intervals for gamma for each model.
+
+***
+  
+```{r, echo=F, results="asis"}
+
+x <- matrix(c(GK.gamma(obs = t11.stdt$Personal.Doctor.Count, fit = as.numeric(p11)),
+              GK.gamma(obs = t12.stdt$Personal.Doctor.Count, fit = as.numeric(p12)),
+              GK.gamma(obs = t13.stdt$Personal.Doctor.Count, fit = as.numeric(p13)),
+              GK.gamma(obs = t14.stdt$Personal.Doctor.Count, fit = as.numeric(p14)),
+              GK.gamma(obs = t15.stdt$Personal.Doctor.Count, fit = as.numeric(p15)),
+              GK.gamma(obs = AY.stdt$Personal.Doctor.Count, fit = as.numeric(pAY))),
+            nrow = 6, ncol = 3, byrow = T
+            )
+colnames(x) <- c("Lower Bound", "Point Estimate", "Upper Bound")
+rownames(x) <- c("2011", "2012", "2013", "2014", "2015", "Five Year Average")
+
+pandoc.table(x,
+             caption = "**Table 11:** Estimated gamma values and 95% confidence intervals for each model.",
+             split.table = Inf)
+
+```
+
+<br>
+
+***
+
+<br>
+<br>
+
+### Model Analysis
+
+  Now that we have verified that our models satisfactorily fit the data, let us look more closely at our models. Figure 5 shows a plot including each model so they can be seen together for comparison. While the slope of each model appears to similar, as time goes on the models appear to shift to the right, indicating that the intecept changes.
+
+***
+  
+```{r, include = F}
+
+
+png("plots/comp_models.png",
+    height = 620, width = 960)
+
+curve(exp(sumt11$coefficients[1,1] + sumt11$coefficients[2,1]*x), n = 1000, from = 60, to = 105, 
+      ylim = c(60, 90), xlim = c(65,100),
+      main = "Fitted Models", 
+      ylab = "Standardized Personal Doctor Count", 
+      xlab = "Standardized Insured Rate",
+      col = "darkmagenta")
+
+curve(exp(sumt12$coefficients[1,1] + sumt12$coefficients[2,1]*x), n = 1000, from = 60, to = 105, 
+      add = T, col = "blue")
+
+curve(exp(sumt13$coefficients[1,1] + sumt13$coefficients[2,1]*x), n = 1000, from = 60, to = 105, 
+      add = T, col = "green")
+
+curve(exp(sumt14$coefficients[1,1] + sumt14$coefficients[2,1]*x), n = 1000, from = 60, to = 105, 
+      add = T, col = "orange")
+
+curve(exp(sumt15$coefficients[1,1] + sumt15$coefficients[2,1]*x), n = 1000, from = 60, to = 105, 
+      add = T, col = "red")
+
+curve(exp(sumAY$coefficients[1,1] + sumAY$coefficients[2,1]*x), n = 1000, from = 60, to = 105, 
+      add = T)
+
+legend(x = 65, y = 90,
+       legend = c("2011", "2012", "2013", "2014", "2015", "Five Year Average"),
+       col = c("darkmagenta", "blue", "green", "orange", "red"),
+       lty = 1)
+
+dev.off()
+
+
+```
+
+![**Figure 5:**  Fitted log-linear models. The slopes of each model appear relatively similar but as time goes on the models appear to shift to the right, indicating that their intercepts differ.](plots/comp_models.png) 
+
+***
+<br>
+
+  Figure 6 shows the 95% confidence intervals for the estimated intercept and slope for each model
+
+```{r, include = F}
+# Takes summary object and desired alpha level as arguments
+
+Param.Conf <- function(obj, alpha = 0.05){
+  
+  z <- qnorm(alpha/2, lower.tail = F)
+  
+  icpt <- obj$coefficients[1,1]
+  SE.icpt <- obj$coefficients[1,2]
+  LB.icpt <- icpt - z*SE.icpt
+  UB.icpt <- icpt + z*SE.icpt
+  
+  slp <- obj$coefficients[2,1]
+  SE.slp <- obj$coefficients[2,2]
+  LB.slp <- slp - z*SE.slp
+  UB.slp <- slp + z*SE.slp
+  
+  out <- c(LB.icpt, icpt, UB.icpt, NA, LB.slp, slp, UB.slp)
+  
+  out
+}
+
+Parameters <- matrix(c(Param.Conf(sumt11),
+                       Param.Conf(sumt12),
+                       Param.Conf(sumt13),
+                       Param.Conf(sumt14),
+                       Param.Conf(sumt15),
+                       Param.Conf(sumAY)),
+                     nrow = 6, ncol = 7, byrow = T)
+colnames(Parameters) <- c("LB Intercept", "Intercept Estimate", "UB Intercept", "       ", "LB Slope", "Slope Estimate", "UB Slope")
+rownames(Parameters) <- c("2011", "2012", "2013", "2014", "2015", "Five Year Average")
+
+```
