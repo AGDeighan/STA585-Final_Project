@@ -466,11 +466,11 @@ $(document).ready(function () {
 <p><br></p>
 <p>After fitting our models we used the dispersion test (“dispersiontest()”) from the Applied Econometrics with R (“AER”) package to test if our data was over- or under-dispersed for a Poisson distribution. We found that our data for each model was significantly underdispersed. To correct for this, we refit the model using the “quasipoisson” family option which uses a Poisson distribution with an estimated dispersion parameter. This does not effect the estimates of the regression parameters, but it does effect the estimated standard errors of said parameters. In our case, since our data were under-dispersed, our estimated standard errors decreased. Table 5 below reports the estimated model parameters, their standard errors, and their p-values.</p>
 <hr />
-<table>
+<table style="width:99%;">
 <caption><strong>Table 5:</strong> Estimated model parameters, standard errors, and p-values for each fitted model.</caption>
 <colgroup>
-<col width="32%"></col>
-<col width="16%"></col>
+<col width="33%"></col>
+<col width="13%"></col>
 <col width="15%"></col>
 <col width="23%"></col>
 <col width="12%"></col>
@@ -494,7 +494,7 @@ $(document).ready(function () {
 </tr>
 <tr class="even">
 <td align="center"></td>
-<td align="center">Coefficient</td>
+<td align="center">Slope</td>
 <td align="center">0.01137</td>
 <td align="center">0.001301</td>
 <td align="center">1.025e-11</td>
@@ -508,7 +508,7 @@ $(document).ready(function () {
 </tr>
 <tr class="even">
 <td align="center"></td>
-<td align="center">Coefficient</td>
+<td align="center">Slope</td>
 <td align="center">0.01069</td>
 <td align="center">0.00151</td>
 <td align="center">4.007e-09</td>
@@ -522,7 +522,7 @@ $(document).ready(function () {
 </tr>
 <tr class="even">
 <td align="center"></td>
-<td align="center">Coefficient</td>
+<td align="center">Slope</td>
 <td align="center">0.0104</td>
 <td align="center">0.001616</td>
 <td align="center">4.261e-08</td>
@@ -536,7 +536,7 @@ $(document).ready(function () {
 </tr>
 <tr class="even">
 <td align="center"></td>
-<td align="center">Coefficient</td>
+<td align="center">Slope</td>
 <td align="center">0.01181</td>
 <td align="center">0.001835</td>
 <td align="center">4.209e-08</td>
@@ -550,7 +550,7 @@ $(document).ready(function () {
 </tr>
 <tr class="even">
 <td align="center"></td>
-<td align="center">Coefficient</td>
+<td align="center">Slope</td>
 <td align="center">0.01195</td>
 <td align="center">0.001921</td>
 <td align="center">9.28e-08</td>
@@ -564,7 +564,7 @@ $(document).ready(function () {
 </tr>
 <tr class="even">
 <td align="center"></td>
-<td align="center">Coefficient</td>
+<td align="center">Slope</td>
 <td align="center">0.01104</td>
 <td align="center">0.001874</td>
 <td align="center">3.002e-07</td>
@@ -1023,6 +1023,70 @@ GK.gamma &lt;- function(obs, fit, alpha = 0.05){
 </div>
 <hr />
 <p><br></p>
+<p>Figure 6 shows the 95% confidence intervals for the estimated intercept and slope for each model. Even though the apparant shift seen in the log-linear models in figure 5 seems to indicate that the intercepts for the models differ, we can see from figure 6 that the confidence intervals for each intercept includes the point estimates for the intercepts of the other model. This negates the possibility that the intercepts differ significantly. Additionally, as expected from looking at figure 5, the slopes do not differ significantly either.</p>
+<hr />
+<div class="figure">
+<img src="data:image/png;base64,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" alt="Figure 6: 95% confidence intervals for the model parameters. Since the confidence intervals for each intercept include the point estimates for every other intercept we can conclude that the intercepts do not differ significantly between models. The same is true for the slope parameters." />
+<p class="caption"><strong>Figure 6:</strong> 95% confidence intervals for the model parameters. Since the confidence intervals for each intercept include the point estimates for every other intercept we can conclude that the intercepts do not differ significantly between models. The same is true for the slope parameters.</p>
+</div>
+<hr />
+<p><br></p>
+<p>Table 12 reports the estimated slope and its 95% confidenct interval for each model. Recall that the repsonse variable is the number of individuals with a personal doctor per 100 respondents and the explanatory variable is the number of individuals with insurance per 100 respondents. Assuming that the BRFSS is a representative sample, we can then view the response variable as the estimated percentage of individuals with a personal doctor in a state while the explanatory variable is the estimated percentage of individuals with insurance in a state. Thus the estimated slope coefficient of 0.01104 implies that for a 1 percentage increase in individuals with insurance we should expect a $e^(0.01104) = 1.011 $ fold increase in the percentage of individuals with a personal doctor. While this may not seem like a large difference it can be quite significant. For instance, for a state the size of Maine (population ~1,292,816) an increase in insured percentage from .93 to .94 would correspond with an estimated increase of over 13,000 individuals with a personal doctor.</p>
+<table style="width:94%;">
+<caption><strong>Table 12:</strong> 95% confidence intervals for the slope parameter of each fitted model.</caption>
+<colgroup>
+<col width="33%"></col>
+<col width="19%"></col>
+<col width="23%"></col>
+<col width="18%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">Lower Bound</th>
+<th align="center">Point Estimate</th>
+<th align="center">Upper Bound</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>2011</strong></td>
+<td align="center">0.008823</td>
+<td align="center">0.01137</td>
+<td align="center">0.01392</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>2012</strong></td>
+<td align="center">0.007736</td>
+<td align="center">0.01069</td>
+<td align="center">0.01365</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>2013</strong></td>
+<td align="center">0.00723</td>
+<td align="center">0.0104</td>
+<td align="center">0.01356</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>2014</strong></td>
+<td align="center">0.008217</td>
+<td align="center">0.01181</td>
+<td align="center">0.01541</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>2015</strong></td>
+<td align="center">0.008183</td>
+<td align="center">0.01195</td>
+<td align="center">0.01571</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>Five Year Average</strong></td>
+<td align="center">0.007372</td>
+<td align="center">0.01104</td>
+<td align="center">0.01472</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
