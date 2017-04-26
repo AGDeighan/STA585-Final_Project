@@ -1,4 +1,41 @@
 
+png("plots/Exp_Slope_Conf.png",
+    height = 620, width = 960)
+
+plot(x = c(1:6), y = exp(Parameters[,6]), 
+     main = "Exponentiated Slope", 
+     ylab = NA,
+     xlab = NA,
+     xlim = c(1,6), 
+     ylim = c(1.006, 1.018), 
+     pch=20, col = "red",
+     axes = FALSE, cex.main = 2, cex = 2, cex.lab = 1)
+box()
+
+axis(1, at = c(1:6), labels = c ("2011", "2012", "2013", "2014", "2015", "Five Year Average"), cex.axis = 1.2)
+axis(2, at = seq(from = 1.004, to = 1.018, by = 0.002), las = 2, cex.axis = 1.2)
+
+
+segments(c(1:6), exp(Parameters[,5]), c(1:6), exp(Parameters[,7]), lwd = 1.5)
+arrows(c(1:6), exp(Parameters[,5]), c(1:6), exp(Parameters[,7]), lwd = 1.5, angle = 90, code = 3, length = 0.03)
+
+dev.off()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 splitter <- function(x){
