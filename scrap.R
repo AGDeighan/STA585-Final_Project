@@ -1,3 +1,77 @@
+
+
+
+splitter <- function(x){
+  
+  fitset <- x[1,]
+  testset <- x[1,]
+  
+  for(i in unique(x$x.state)){
+    
+    dfs <- x[x$x.state==i,]
+    n   <- nrow(dfs)
+    dfs[,"index"] <- 1:n
+    sf <- sample(1:n, size = ceiling(n/2))
+    st <- setdiff(1:n, sf)
+    
+    fitset <- rbind(fitset, dfs[sf,1:4])
+    testset <- rbind(testset, dfs[st,1:4])
+    
+  }
+  
+  fitset <- fitset[2:nrow(fitset),]
+  testset <- testset[2:nrow(testset),]
+  
+  out <- list(fitset, testset)
+  
+  out
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 png("plots/counts_vs_insur.png",
     height = 768, width = 620)
 
