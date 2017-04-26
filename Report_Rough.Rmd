@@ -1,11 +1,26 @@
 ---
-title: "STA 585 Report Rough Draft"
+title: "Relationship between Insured Rate and Proportion of Individuals with a Personal Doctor"
 author: "Andrew Deighan"
 date: "April 17, 2017"
 output: html_document
+bibliography: ref.bib
+csl: numeric-style.csl
 ---
 
+# Introduction
+  We are interested in how the rate of individuals with insurance is related to improved primary care access. Improving access to primary healthcare has been shown time and time again to improve health outcomes and lower overall healthcare system costs. From the county level to the national level, greater accessibility of primary care is strongly associated with increased general health along with decreased mortality rates, hospital admissions, overall healthcare system costs, and socieoeconomic disparities [@PrimaryCare]. Countries with governmental policies that are supportive of primary care have better primary care systems and subsequently better health outcomes at lower costs. One of the policies most consistently linked with better primary care is universal financial coverage of healthcare costs, provided by or regulated by the goverment [@PrimaryCare]. Most industrialized countries provide universal or near-universal access to primary care. Notably, the United States is not included in this group. The United States does have some public programs (Medicaid and Medicare) that help pay healthcare costs for the elderly and poor, but for most Americans private health insurance is needed to cover healthcare costs.
+  
+  In March 2010 the Patient Protection and Affordable Care Act (ACA) was signed into law. One of the primary objectives of this legislation was to decrease the uninsured rate in the United States. Although some reforms began in 2010 directly after the signing of the bill, most major reforms did not take effect until 2014 [@ACA]. Beginning in 2014 the government funded Medicaid program was expanded in most states, new private insurance marketplaces selling government subsidized insurance plans were opened, and new consumer protections were placed on private insurance companies. During the first open-enrollment period of the ACA (Oct 1st 2013 through April 15th 2014) an estimated 20 million Americans gained insurance under the ACA. In roughly the same period of time the uninsured rate dropped from around 18% to about 13.4% [@ACA]. Since then the uninsured rate has continued to steadily drop, down to an estimated 9.1% in 2015 [@Census].
+  
+  With this recent boost in the proportion of Americans with health insurance come important questions about the overall effects of more people having health insurance. The primary question for us is whether or not an increse in the insured rate is correlated with an increase in primary care access, and, if so, to what degree. In an attemp to answer this question we will investigate the relationship between the number of individuals with a personal doctor and the number of individuals with insurance at the state level. Thus we are using the number of individuals with a personal doctor as a proxy for primary care access. Specifically we are use Poisson regression to regress the estimated count of individuals with a personal doctor onto the insured rate. We are standardizing the estimated count to an estimate of the count *per 100 individuals* which in essence is the same as the percentage of individuals with a personal doctor. If there is indeed a positive correlation between the rate (percentage) of individuals with a personal doctor and the insured rate, then the recent reduction in the uninsured rate could herald a future overall improvement of health outcomes and lowere healthcare system costs.
+  
+  In the Methods and Results section which follows we first discuss the datasets used, the cleaning of the data, the weighting of the data, and the standardizing of counts. We then briefly investigate the change in the insured rate from 2011 through 2015 to ensure that it matches with the previously described figues. After verifying the trend of increasing in insured rates we then move onto a discussion of the fitting and diagnostics processes used in building and validating our models. Finally, in the last section of the Methods and Results we interpret our models. In the Discussion section of the report we summarize our findings and explain their meanings and importance.
+
 # Methods and Results
+
+## Data Sets
+
+ The data used in this study were directly taken from the Behavioral Risk Factor Surveillance System (BRFSS) annual surveys from 2011 through 2015. The BRFSS survey is a joint effort between individual state and territory health departments and the CDC [@BRFSS]. Every year, each state does a land-line and cell-phone survey of selected telephone numbers of residents in their state and asks a set of questions. The core questions asked by each state are the same. The data used in this study came from responses to core questions of the BRFSS Survey that all states were asked. Any refusals to respond or responses of "Unsure/Don't Know" for the response variable or the explanatory variable of interest were ignored. Thus, only full responses were included. However, the data sets are large so the fraction of incomplete responses was negligble.
 
 ## Yearly Insured Rates
 
