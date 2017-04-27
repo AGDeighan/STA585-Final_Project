@@ -877,7 +877,7 @@ sumAY <- summary(AY.glm)
 png("plots/models.png",
     height = 620, width = 960)
 
-par(mfrow = c(2,3), mar = c(5.1, 4.1, 2.1, 2.1), oma = c(0,0,3,0))
+par(mfrow = c(2,3), mar = c(5.1, 4.1, 2.1, 2.1), oma = c(0,1,3,0))
 #layout(matrix(c(1,1,2,2,3,3,4,4,5,5,6,6,7,7,0,8,8,8), 3, 6, byrow = TRUE))
 
 
@@ -887,7 +887,7 @@ plot(t11.std$Insurance.Count, t11.std$Personal.Doctor.Count,
      main = "2011",
      ylab = "Standardized Personal Doctor Counts",
      xlab = "Standardized Insurance Counts",
-     cex.lab = 1.2, cex.main = 1.2, pch = 20, col = "darkmagenta")
+     cex.lab = 1.5, cex.main = 1.5, cex.axis = 1.4, pch = 20, col = "darkmagenta")
 curve(exp(sumt11$coefficients[1,1] + sumt11$coefficients[2,1]*x), n = 1000, from = 60, to = 105, add = T)
 
 plot(t12.std$Insurance.Count, t12.std$Personal.Doctor.Count,
@@ -896,7 +896,7 @@ plot(t12.std$Insurance.Count, t12.std$Personal.Doctor.Count,
      main = "2012",
      ylab = "Standardized Personal Doctor Counts",
      xlab = "Standardized Insurance Counts",
-     cex.lab = 1, cex.main = 1.2, pch = 20, col = "blue")
+     cex.lab = 1.5, cex.main = 1.5, cex.axis = 1.4, pch = 20, col = "blue")
 curve(exp(sumt12$coefficients[1,1] + sumt12$coefficients[2,1]*x), n = 1000, from = 60, to = 105, add = T)
 
 plot(t13.std$Insurance.Count, t13.std$Personal.Doctor.Count,
@@ -905,7 +905,7 @@ plot(t13.std$Insurance.Count, t13.std$Personal.Doctor.Count,
      main = "2013",
      ylab = "Standardized Personal Doctor Counts",
      xlab = "Standardized Insurance Counts",
-     cex.lab = 1.2, cex.main = 1.2, pch = 20, col = "green")
+     cex.lab = 1.5, cex.main = 1.5, cex.axis = 1.4, pch = 20, col = "green")
 curve(exp(sumt13$coefficients[1,1] + sumt13$coefficients[2,1]*x), n = 1000, from = 60, to = 105, add = T)
 
 plot(t14.std$Insurance.Count, t14.std$Personal.Doctor.Count,
@@ -914,7 +914,7 @@ plot(t14.std$Insurance.Count, t14.std$Personal.Doctor.Count,
      main = "2014",
      ylab = "Standardized Personal Doctor Counts",
      xlab = "Standardized Insurance Counts",
-     cex.lab = 1.2, cex.main = 1.2, pch = 20, col = "orange")
+     cex.lab = 1.5, cex.main = 1.5, cex.axis = 1.4, pch = 20, col = "orange")
 curve(exp(sumt14$coefficients[1,1] + sumt14$coefficients[2,1]*x), n = 1000, from = 60, to = 105, add = T)
 
 plot(t15.std$Insurance.Count, t15.std$Personal.Doctor.Count,
@@ -923,7 +923,7 @@ plot(t15.std$Insurance.Count, t15.std$Personal.Doctor.Count,
      main = "2015",
      ylab = "Standardized Personal Doctor Counts",
      xlab = "Standardized Insurance Counts",
-     cex.lab = 1.2, cex.main = 1.2, pch = 20, col = "red")
+     cex.lab = 1.5, cex.main = 1.5, cex.axis = 1.4, pch = 20, col = "red")
 curve(exp(sumt15$coefficients[1,1] + sumt15$coefficients[2,1]*x), n = 1000, from = 60, to = 105, add = T)
 
 plot(AY.std$Insurance.Count, AY.std$Personal.Doctor.Count,
@@ -932,7 +932,7 @@ plot(AY.std$Insurance.Count, AY.std$Personal.Doctor.Count,
      main = "Five Year Average",
      ylab = "Standardized Personal Doctor Counts",
      xlab = "Standardized Insurance Counts",
-     cex.lab = 1.2, cex.main = 1.2, pch = 20)
+     cex.lab = 1.5, cex.main = 1.5, cex.axis = 1.4, pch = 20)
 curve(exp(sumAY$coefficients[1,1] + sumAY$coefficients[2,1]*x), n = 1000, from = 60, to = 105, add = T)
 
 mtext('Fitted Models and Observed Data', outer = TRUE, font = 2, padj = -1, cex = 1.2)
@@ -996,7 +996,7 @@ pandoc.table(x,
 png("plots/Residual_Plots.png",
      height = 600, width = 900)
 
-par(mfrow=c(2,3), mar = c(5.1, 4.1, 7.1, 2.1))
+par(mfrow=c(2,3), mar = c(5.1, 4.1, 7.1, 2.1), oma = c(0,1,))
 
 plot(t11.glm$fitted.values, t11.std$Personal.Doctor.Count - t11.glm$fitted.values,
      ylim = c(-15, 15),
@@ -1004,7 +1004,7 @@ plot(t11.glm$fitted.values, t11.std$Personal.Doctor.Count - t11.glm$fitted.value
      main = "2011",
      ylab = "Residuals",
      xlab = "Fitted Values",
-     cex.lab = 1.1, cex.main = 1.2 )
+     cex.lab = 1.5, cex.main = 1.5, cex.axis = 1.4)
 abline(h=0)
 
 plot(t12.glm$fitted.values,  t12.std$Personal.Doctor.Count - t12.glm$fitted.values,
@@ -1013,7 +1013,7 @@ plot(t12.glm$fitted.values,  t12.std$Personal.Doctor.Count - t12.glm$fitted.valu
      main = "2012",
      ylab = "Residuals",
      xlab = "Fitted Values",
-     cex.lab = 1.1, cex.main = 1.2 )
+     cex.lab = 1.5, cex.main = 1.5, cex.axis = 1.4)
 abline(h=0)
 
 plot(t13.glm$fitted.values, t13.std$Personal.Doctor.Count - t13.glm$fitted.values,
@@ -1022,7 +1022,7 @@ plot(t13.glm$fitted.values, t13.std$Personal.Doctor.Count - t13.glm$fitted.value
      main = "2013",
      ylab = "Residuals",
      xlab = "Fitted Values",
-     cex.lab = 1.1, cex.main = 1.2 )
+     cex.lab = 1.5, cex.main = 1.5, cex.axis = 1.4)
 abline(h=0)
 
 plot(t14.glm$fitted.values,  t14.std$Personal.Doctor.Count - t14.glm$fitted.values,
@@ -1031,7 +1031,7 @@ plot(t14.glm$fitted.values,  t14.std$Personal.Doctor.Count - t14.glm$fitted.valu
      main = "2014",
      ylab = "Residuals",
      xlab = "Fitted Values",
-     cex.lab = 1.1, cex.main = 1.2 )
+     cex.lab = 1.5, cex.main = 1.5, cex.axis = 1.4)
 abline(h=0)
 
 plot(t15.glm$fitted.values,  t15.std$Personal.Doctor.Count - t15.glm$fitted.values,
@@ -1040,7 +1040,7 @@ plot(t15.glm$fitted.values,  t15.std$Personal.Doctor.Count - t15.glm$fitted.valu
      main = "2015",
      ylab = "Residuals",
      xlab = "Fitted Values",
-     cex.lab = 1.1, cex.main = 1.2 )
+     cex.lab = 1.5, cex.main = 1.5, cex.axis = 1.4)
 abline(h=0)
 
 plot(AY.glm$fitted.values,  AY.std$Personal.Doctor.Count - AY.glm$fitted.values,
@@ -1049,7 +1049,7 @@ plot(AY.glm$fitted.values,  AY.std$Personal.Doctor.Count - AY.glm$fitted.values,
      main = "Five Year Average",
      ylab = "Residuals",
      xlab = "Fitted Values",
-     cex.lab = 1.1, cex.main = 1.2 )
+     cex.lab = 1.5, cex.main = 1.5, cex.axis = 1.4)
 abline(h=0)
 
 mtext('Residual Plots', outer = TRUE, font = 2, padj = 1.5, cex = 1.2)
@@ -1245,13 +1245,12 @@ pandoc.table(x,
 
 + Pearson global fit test
 + Likelihood ratio global fit test
-+ Deviance comparative fit test
 
   We will also test the predictive power of our models using the concordance statistic gamma.
   
 <br>
   
-#### Global and Comparative Fit Tests
+#### Global Fit Tests
 
   We will use the R function "predict()" to generate fitted values for observations in the diagnostic data sets and then use these fitted values to perform the above tests in the same manner as before. Tables 9 and 10 report the global fit statistics calculated using the test data sets. The p-values are still all approximately 1 indicating that there is still no evidence that our models fit the data poorly.
   
@@ -1488,12 +1487,15 @@ pandoc.table(x,
 png("plots/comp_models.png",
     height = 620, width = 960)
 
+par(oma = c(0,1,0,0))
+
 curve(exp(sumt11$coefficients[1,1] + sumt11$coefficients[2,1]*x), n = 1000, from = 60, to = 105, 
       ylim = c(60, 90), xlim = c(65,100),
       main = "Fitted Models", 
       ylab = "Standardized Personal Doctor Count", 
       xlab = "Standardized Insured Rate",
-      col = "darkmagenta")
+      col = "darkmagenta",
+      cex.lab = 1.5, cex.main = 1.5, cex.axis = 1.4)
 
 curve(exp(sumt12$coefficients[1,1] + sumt12$coefficients[2,1]*x), n = 1000, from = 60, to = 105, 
       add = T, col = "blue")
