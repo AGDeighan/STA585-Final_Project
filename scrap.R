@@ -1,4 +1,92 @@
 
+x <- data.frame("Personal.Doctor.Count" = seq(60, 90, .25), 
+                "Insurance.Count" = seq(70, 100, .25), 
+                "Total.Respondents" = rep(NA, 121),
+                "Medicaid.Expansion" = rep(NA, 121))
+
+pred.conf <- predict(AY.glm, x, se.fit=TRUE)
+
+fit.mean.conf <- function(x, alpha = 0.05, explanatory = seq(70, 100, .25) ){
+  
+  z <- qnorm(alpha/2, lower.tail = F)
+  
+  out <- data.frame("Lower.Bound" = rep(NA, length(x$fit)), 
+                    "Esitmate" = rep(NA, length(x$fit)), 
+                    "Upper.Bound" = rep(NA, length(x$fit)),
+                    "x" = explanatory)
+  
+  for(i in 1:length(x$fit)){
+    out$Esitmate[i] <- exp(x$fit[i])
+    out$Lower.Bound[i] <- exp(x$fit[i] - z*x$se.fit[i])
+    out$Upper.Bound[i] <- exp(x$fit[i] + z*x$se.fit[i])
+  }
+  
+  out
+}
+
+
+png("plots/mod_conf.png",
+    height = 620, width = 960)
+
+par(mfrow = c(1,2), omi = c(0,0,1,0))
+
+plot(conf.plot$x, conf.plot$Esitmate, type = "n",
+     main = "Five Year Average Model",
+     xlab = "Percentage of Individuals with Insurance",
+     ylab = "Mean Percentage of Individuals with a Personal Doctor")
+points(AY.std$Insurance.Count, AY.std$Personal.Doctor.Count)
+lines(conf.plot$x, conf.plot$Esitmate, lty = 1, lwd = 2)
+lines(conf.plot$x, conf.plot$Lower.Bound, lty = 2, lwd = 2)
+lines(conf.plot$x, conf.plot$Upper.Bound, lty = 2, lwd = 2)
+
+#####
+
+plot(conf.plot$x, conf.plot$Esitmate, type = "n",
+     main = "Individual Years Superimposed",
+     xlab = "Percentage of Individuals with Insurance",
+     ylab = "Mean Percentage of Individuals with a Personal Doctor")
+lines(conf.plot$x, conf.plot$Esitmate, lty = 1, lwd = 2)
+lines(conf.plot$x, conf.plot$Lower.Bound, lty = 2, lwd = 2)
+lines(conf.plot$x, conf.plot$Upper.Bound, lty = 2, lwd = 2)
+
+pred.conf11 <- predict(t11.glm, x, se.fit=TRUE)
+conf.plot11 <- fit.mean.conf(x = pred.conf11)
+lines(conf.plot11$x, conf.plot11$Esitmate, type = "l", col = "darkmagenta")
+
+pred.conf12 <- predict(t12.glm, x, se.fit=TRUE)
+conf.plot12 <- fit.mean.conf(x = pred.conf12)
+lines(conf.plot12$x, conf.plot12$Esitmate, type = "l", col = "blue")
+
+pred.conf13 <- predict(t13.glm, x, se.fit=TRUE)
+conf.plot13 <- fit.mean.conf(x = pred.conf13)
+lines(conf.plot13$x, conf.plot13$Esitmate, type = "l", col = "green")
+
+pred.conf14 <- predict(t14.glm, x, se.fit=TRUE)
+conf.plot14 <- fit.mean.conf(x = pred.conf14)
+lines(conf.plot14$x, conf.plot14$Esitmate, type = "l", col = "orange")
+
+pred.conf15 <- predict(t15.glm, x, se.fit=TRUE)
+conf.plot15 <- fit.mean.conf(x = pred.conf15)
+lines(conf.plot15$x, conf.plot15$Esitmate, type = "l", col = "red")
+
+legend(x = 70, y = 93.5,
+       legend = c("2011", "2012", "2013", "2014", "2015", "Five Year Average"),
+       col = c("darkmagenta", "blue", "green", "orange", "red", "black"),
+       lty = 1,
+       lwd = 2)
+
+mtext('95% Confidence Band for Means', outer = TRUE, font = 2, padj = -1, cex = 1.3)
+
+dev.off()
+
+
+
+
+
+
+
+
+
 png("plots/Exp_Slope_Conf.png",
     height = 620, width = 960)
 
@@ -20,6 +108,8 @@ segments(c(1:6), exp(Parameters[,5]), c(1:6), exp(Parameters[,7]), lwd = 1.5)
 arrows(c(1:6), exp(Parameters[,5]), c(1:6), exp(Parameters[,7]), lwd = 1.5, angle = 90, code = 3, length = 0.03)
 
 dev.off()
+
+
 
 
 
